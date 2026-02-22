@@ -1,0 +1,2330 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Innovative X — SuperAdmin Dashboard</title>
+
+  <!-- ============================================================
+       FAVICON LINKS — All files should be in /assets/ folder
+  ============================================================ -->
+  <link rel="icon" type="image/png" href="assets/favicon-96x96.png" sizes="96x96"/>
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg"/>
+  <link rel="shortcut icon" href="assets/favicon.ico"/>
+  <link rel="apple-touch-icon" sizes="180x180" href="assets/apple-touch-icon.png"/>
+  <link rel="manifest" href="assets/site.webmanifest"/>
+
+  <!-- ============================================================
+       FONTS — Rajdhani (UI) + JetBrains Mono (data/code)
+  ============================================================ -->
+  <link href="https://fonts.googleapis.com/css2?family=Rajdhani:wght@400;500;600;700&family=JetBrains+Mono:wght@300;400;500&display=swap" rel="stylesheet"/>
+
+  <!-- ============================================================
+       FONT AWESOME — For real social media icons
+  ============================================================ -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"/>
+
+  <!-- ============================================================
+       CSS VARIABLES — Brand colors, sizes, spacing
+       Team: update --blue and --green to match client theme if needed
+  ============================================================ -->
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      /* Brand Colors */
+      --blue:     #0f8fff;
+      --blue2:    #1a6bff;
+      --green:    #aaee00;
+      --green2:   #88cc00;
+
+      /* Background Layers */
+      --bg:       #000000;
+      --surface:  #080f16;
+      --surface2: #0c1520;
+      --surface3: #111d2b;
+
+      /* Borders */
+      --border:   #0d2035;
+      --border2:  #1a3550;
+
+      /* Text */
+      --text:     #e0f0ff;
+      --text2:    #8ab0cc;
+      --muted:    #3a6080;
+
+      /* Status Colors */
+      --success:  #00dd88;
+      --error:    #ff4455;
+      --warning:  #ffaa00;
+
+      /* Layout Dimensions */
+      --sidebar-w: 260px;
+      --header-h:  64px;
+    }
+
+    body {
+      font-family: 'Rajdhani', sans-serif;
+      background: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      overflow-x: hidden;
+    }
+
+    /* ============================================================
+       HEADER — Fixed top bar
+    ============================================================ */
+    .header {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      height: var(--header-h);
+      background: var(--surface);
+      border-bottom: 1px solid var(--border2);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      z-index: 100;
+      box-shadow: 0 2px 20px rgba(0,0,0,0.5);
+    }
+
+    /* Left side of header — Brand Name */
+    .header-left {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      height: 100%;
+      width: var(--sidebar-w);
+      border-right: 1px solid var(--border2);
+      padding: 0 20px;
+      flex-shrink: 0;
+      position: relative;
+    }
+    .header-brand-name {
+      font-size: 16px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      background: linear-gradient(90deg, var(--blue), var(--green));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+      white-space: nowrap;
+    }
+
+    /* Right side of header — Super Admin centered + logout pinned right */
+    .header-right {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 14px;
+      padding: 0 16px;
+      flex: 1;
+      position: relative;
+    }
+    .header-admin-label {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--text2);
+      text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .header-admin-label span { color: var(--blue); }
+    .header-clock {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: var(--muted);
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      padding: 6px 12px;
+      white-space: nowrap;
+    }
+    .btn-logout {
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      background: rgba(255,68,85,0.1);
+      border: 1px solid rgba(255,68,85,0.3);
+      border-radius: 8px;
+      padding: 7px 14px;
+      color: var(--error);
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      text-decoration: none;
+      transition: all 0.2s;
+      white-space: nowrap;
+      position: absolute;
+      right: 16px;
+    }
+    .btn-logout:hover { background: rgba(255,68,85,0.2); border-color: var(--error); }
+
+    /* Hamburger — mobile only, pinned left */
+    .hamburger {
+      display: none;
+      flex-direction: column;
+      gap: 5px;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px;
+      flex-shrink: 0;
+      position: absolute;
+      left: 16px;
+    }
+    .hamburger span {
+      display: block;
+      width: 22px; height: 2px;
+      background: var(--text2);
+      border-radius: 2px;
+      transition: all 0.3s;
+    }
+
+    /* ============================================================
+       LAYOUT — Sidebar + Content side by side
+    ============================================================ */
+    .layout {
+      display: flex;
+      margin-top: var(--header-h);
+      min-height: calc(100vh - var(--header-h));
+    }
+
+    /* ============================================================
+       SIDEBAR — Left navigation panel
+    ============================================================ */
+    .sidebar {
+      width: var(--sidebar-w);
+      background: var(--surface);
+      border-right: 1px solid var(--border2);
+      position: fixed;
+      top: var(--header-h);
+      bottom: 0;
+      left: 0;
+      overflow-y: auto;
+      z-index: 90;
+      transition: transform 0.3s;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border2) transparent;
+    }
+    .sidebar::-webkit-scrollbar { width: 4px; }
+    .sidebar::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+    /* Sidebar section label */
+    .sidebar-section { padding: 20px 0 8px; }
+    .sidebar-section-label {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 10px;
+      letter-spacing: 0.18em;
+      color: var(--muted);
+      padding: 0 20px 10px;
+      text-transform: uppercase;
+      border-bottom: 1px solid var(--border);
+      margin-bottom: 6px;
+    }
+
+    /* Nav parent item */
+    .nav-item { position: relative; }
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      padding: 12px 20px;
+      color: var(--text2);
+      cursor: pointer;
+      transition: all 0.2s;
+      border-left: 3px solid transparent;
+      user-select: none;
+    }
+    .nav-link:hover { background: rgba(15,143,255,0.06); color: var(--text); }
+    .nav-link.active { background: rgba(15,143,255,0.1); color: var(--blue); border-left-color: var(--blue); }
+    .nav-icon { font-size: 17px; width: 22px; text-align: center; flex-shrink: 0; }
+    .nav-label { font-size: 15px; font-weight: 600; letter-spacing: 0.03em; flex: 1; }
+    .nav-arrow { font-size: 10px; transition: transform 0.25s; color: var(--muted); }
+    .nav-item.open > .nav-link .nav-arrow { transform: rotate(90deg); }
+
+    /* Sub navigation links */
+    .sub-nav {
+      max-height: 0;
+      overflow: hidden;
+      transition: max-height 0.3s ease;
+      background: rgba(0,0,0,0.2);
+    }
+    .nav-item.open .sub-nav { max-height: 300px; }
+    .sub-link {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 20px 10px 54px;
+      color: var(--text2);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      border-left: 3px solid transparent;
+    }
+    .sub-link::before {
+      content: '';
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--muted);
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+    .sub-link:hover { background: rgba(15,143,255,0.05); color: var(--text); }
+    .sub-link:hover::before { background: var(--blue); }
+    .sub-link.active { color: var(--green); border-left-color: var(--green); background: rgba(170,238,0,0.05); }
+    .sub-link.active::before { background: var(--green); }
+
+    /* Mobile sidebar overlay */
+    .sidebar-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.7);
+      z-index: 89;
+    }
+
+    /* ============================================================
+       CONTENT AREA — Right side main content
+    ============================================================ */
+    .content {
+      margin-left: var(--sidebar-w);
+      flex: 1;
+      padding: 28px;
+      min-height: calc(100vh - var(--header-h));
+      width: calc(100% - var(--sidebar-w));
+    }
+
+    /* Page header bar */
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 24px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--border2);
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .page-title { font-size: 24px; font-weight: 700; letter-spacing: 0.04em; }
+    .page-breadcrumb {
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      color: var(--muted);
+      letter-spacing: 0.08em;
+      margin-top: 4px;
+    }
+    .page-breadcrumb span { color: var(--blue); }
+    .page-actions { display: flex; gap: 10px; flex-wrap: wrap; }
+
+    /* ============================================================
+       PANEL SYSTEM — Each nav item shows its own panel
+       Team: add API calls inside each panel's JS section
+    ============================================================ */
+    .panel { display: none; animation: panelIn 0.3s ease; }
+    .panel.active { display: block; }
+    @keyframes panelIn {
+      from { opacity: 0; transform: translateY(8px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ============================================================
+       CARD — General content container
+    ============================================================ */
+    .card {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 20px;
+    }
+    .card-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border2);
+      background: rgba(15,143,255,0.03);
+    }
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .card-title-dot {
+      width: 6px; height: 6px;
+      border-radius: 50%;
+      background: var(--blue);
+      box-shadow: 0 0 6px var(--blue);
+    }
+
+    /* ============================================================
+       TABLE — Data tables for market watch, api status etc.
+    ============================================================ */
+    .table-wrap { overflow-x: auto; }
+    table { width: 100%; border-collapse: collapse; font-size: 14px; }
+    thead tr {
+      background: rgba(15,143,255,0.06);
+      border-bottom: 1px solid var(--border2);
+    }
+    th {
+      padding: 13px 16px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.1em;
+      color: var(--text2);
+      text-align: left;
+      white-space: nowrap;
+      text-transform: uppercase;
+    }
+    td {
+      padding: 13px 16px;
+      border-bottom: 1px solid var(--border);
+      color: var(--text);
+      vertical-align: middle;
+      white-space: nowrap;
+    }
+    tbody tr { transition: background 0.15s; cursor: context-menu; }
+    tbody tr:hover { background: rgba(15,143,255,0.04); }
+    tbody tr:last-child td { border-bottom: none; }
+    tbody tr.selected { background: rgba(170,238,0,0.05); }
+    .td-mono { font-family: 'JetBrains Mono', monospace; font-size: 13px; }
+    .td-up   { color: var(--success); }
+    .td-down { color: var(--error); }
+
+    /* Row checkbox */
+    .row-check { width: 16px; height: 16px; accent-color: var(--green); cursor: pointer; }
+
+    /* ============================================================
+       STATUS INDICATORS — Connected / Disconnected lights
+    ============================================================ */
+    .status-light {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.06em;
+    }
+    .status-dot {
+      width: 9px; height: 9px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+    .status-dot.connected {
+      background: var(--success);
+      box-shadow: 0 0 8px var(--success);
+      animation: glow-pulse 2s ease-in-out infinite;
+    }
+    .status-dot.disconnected {
+      background: var(--error);
+      box-shadow: 0 0 8px var(--error);
+    }
+    @keyframes glow-pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.4; }
+    }
+
+    /* ============================================================
+       BADGES — Small status labels
+    ============================================================ -->
+    */
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 5px;
+      padding: 3px 10px;
+      border-radius: 20px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 11px;
+      font-weight: 500;
+      letter-spacing: 0.05em;
+    }
+    .badge-green { background: rgba(0,221,136,0.1); color: var(--success); border: 1px solid rgba(0,221,136,0.2); }
+    .badge-red   { background: rgba(255,68,85,0.1);  color: var(--error);   border: 1px solid rgba(255,68,85,0.2); }
+    .badge-blue  { background: rgba(15,143,255,0.1); color: var(--blue);    border: 1px solid rgba(15,143,255,0.2); }
+    .badge-dot   { width: 5px; height: 5px; border-radius: 50%; background: currentColor; }
+
+    /* ============================================================
+       TOGGLE SWITCH — On/Off switch component
+    ============================================================ -->
+    */
+    .toggle-wrap { display: flex; align-items: center; gap: 8px; }
+    .toggle { position: relative; width: 44px; height: 24px; cursor: pointer; }
+    .toggle input { opacity: 0; width: 0; height: 0; }
+    .toggle-slider {
+      position: absolute; inset: 0;
+      background: var(--border2);
+      border-radius: 24px;
+      transition: background 0.25s;
+    }
+    .toggle-slider::before {
+      content: '';
+      position: absolute;
+      width: 18px; height: 18px;
+      border-radius: 50%;
+      background: var(--muted);
+      left: 3px; top: 3px;
+      transition: all 0.25s;
+    }
+    .toggle input:checked + .toggle-slider { background: rgba(0,221,136,0.25); border: 1px solid var(--success); }
+    .toggle input:checked + .toggle-slider::before { transform: translateX(20px); background: var(--success); }
+    .toggle-label { font-size: 13px; font-weight: 600; color: var(--text2); min-width: 28px; }
+
+    /* ============================================================
+       BUTTONS — All button styles
+    ============================================================ -->
+    */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 9px 18px;
+      border-radius: 8px;
+      font-family: 'Rajdhani', sans-serif;
+      font-size: 14px;
+      font-weight: 700;
+      letter-spacing: 0.05em;
+      cursor: pointer;
+      border: none;
+      transition: all 0.2s;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .btn-primary {
+      background: linear-gradient(135deg, var(--blue2), var(--blue));
+      color: #fff;
+      box-shadow: 0 4px 15px rgba(15,143,255,0.25);
+    }
+    .btn-primary:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(15,143,255,0.4); }
+    .btn-success {
+      background: linear-gradient(135deg, #00aa66, var(--success));
+      color: #fff;
+    }
+    .btn-success:hover { transform: translateY(-1px); box-shadow: 0 6px 20px rgba(0,221,136,0.3); }
+    .btn-danger {
+      background: rgba(255,68,85,0.12);
+      border: 1px solid rgba(255,68,85,0.3);
+      color: var(--error);
+    }
+    .btn-danger:hover { background: rgba(255,68,85,0.22); }
+    .btn-outline {
+      background: transparent;
+      border: 1px solid var(--border2);
+      color: var(--text2);
+    }
+    .btn-outline:hover { border-color: var(--blue); color: var(--blue); }
+    .btn-warning {
+      background: rgba(255,170,0,0.12);
+      border: 1px solid rgba(255,170,0,0.3);
+      color: var(--warning);
+    }
+    .btn-warning:hover { background: rgba(255,170,0,0.22); }
+    .btn-sm { padding: 6px 12px; font-size: 13px; }
+    .btn:disabled { opacity: 0.4; cursor: not-allowed; transform: none !important; }
+
+    /* ============================================================
+       CONTEXT MENU — Right-click menu on market watch rows
+    ============================================================ -->
+    */
+    .ctx-menu {
+      position: fixed;
+      z-index: 500;
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      padding: 6px;
+      min-width: 180px;
+      box-shadow: 0 10px 40px rgba(0,0,0,0.6);
+      display: none;
+      animation: ctxIn 0.15s ease;
+    }
+    @keyframes ctxIn { from { opacity:0; transform:scale(0.95); } to { opacity:1; transform:scale(1); } }
+    .ctx-menu.show { display: block; }
+    .ctx-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 14px;
+      border-radius: 7px;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      color: var(--text2);
+      transition: all 0.15s;
+    }
+    .ctx-item:hover { background: rgba(15,143,255,0.08); color: var(--text); }
+    .ctx-item.ctx-edit:hover   { color: var(--blue); }
+    .ctx-item.ctx-delete:hover { background: rgba(255,68,85,0.08); color: var(--error); }
+    .ctx-sep { height: 1px; background: var(--border); margin: 4px 0; }
+
+    /* ============================================================
+       MODAL SYSTEM — Popup dialogs
+       Team: connect form submits to API endpoints here
+    ============================================================ -->
+    */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.88);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 400;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.25s;
+      padding: 20px;
+    }
+    .modal-overlay.active { opacity: 1; pointer-events: all; }
+    .modal {
+      background: var(--surface);
+      border: 1px solid var(--border2);
+      border-radius: 16px;
+      width: 100%;
+      box-shadow: 0 0 80px rgba(15,143,255,0.1), 0 40px 80px rgba(0,0,0,0.7);
+      transform: scale(0.94) translateY(14px);
+      transition: transform 0.3s cubic-bezier(0.16,1,0.3,1);
+      overflow: hidden;
+      max-height: 90vh;
+      overflow-y: auto;
+    }
+    .modal-overlay.active .modal { transform: scale(1) translateY(0); }
+    .modal-sm { max-width: 420px; }
+    .modal-md { max-width: 520px; }
+    .modal-topbar { height: 3px; background: linear-gradient(90deg, var(--blue2), var(--blue), var(--green)); flex-shrink: 0; }
+    .modal-topbar.danger { background: linear-gradient(90deg, var(--error), #ff8800); }
+    .modal-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 20px 24px 16px;
+      border-bottom: 1px solid var(--border);
+    }
+    .modal-title { font-size: 18px; font-weight: 700; letter-spacing: 0.03em; }
+    .modal-close-btn {
+      width: 30px; height: 30px;
+      border-radius: 7px;
+      background: rgba(255,255,255,0.04);
+      border: 1px solid var(--border2);
+      color: var(--muted);
+      cursor: pointer;
+      font-size: 13px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s;
+    }
+    .modal-close-btn:hover { background: rgba(255,68,85,0.1); border-color: var(--error); color: var(--error); }
+    .modal-body  { padding: 24px; }
+    .modal-footer {
+      display: flex;
+      gap: 10px;
+      justify-content: flex-end;
+      padding: 16px 24px;
+      border-top: 1px solid var(--border);
+    }
+
+    /* ============================================================
+       FORM ELEMENTS — Inputs, selects, labels
+       Team: add name/id attributes for backend integration
+    ============================================================ -->
+    */
+    .form-row   { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .form-row-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; }
+    @media(max-width:640px) {
+      .form-row, .form-row-3 { grid-template-columns: 1fr; }
+    }
+    .form-group { margin-bottom: 16px; }
+    .form-group:last-child { margin-bottom: 0; }
+    .form-label {
+      display: block;
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      color: var(--text2);
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+    .form-input,
+    .form-select {
+      width: 100%;
+      background: rgba(15,143,255,0.04);
+      border: 1px solid var(--border2);
+      border-radius: 8px;
+      padding: 11px 14px;
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 13px;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .form-input::placeholder { color: var(--muted); }
+    .form-input:focus,
+    .form-select:focus {
+      border-color: var(--blue);
+      background: rgba(15,143,255,0.07);
+      box-shadow: 0 0 0 3px rgba(15,143,255,0.1);
+    }
+    .form-select { cursor: pointer; }
+    .form-select option { background: var(--surface2); color: var(--text); }
+
+    /* ============================================================
+       CLIENT FORM SECTIONS — Used in Add/Edit Client
+    ============================================================ -->
+    */
+    .form-section {
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: 12px;
+      margin-bottom: 16px;
+      overflow: hidden;
+    }
+    .form-section-header {
+      display: flex;
+      align-items: center;
+      padding: 14px 18px;
+      border-bottom: 1px solid var(--border2);
+      background: rgba(15,143,255,0.03);
+    }
+    .form-section-title {
+      font-size: 15px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+      color: var(--text);
+    }
+    .form-section-body { padding: 18px; }
+
+    /* Yes/No toggle grid */
+    .yn-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+    @media(max-width:600px) { .yn-grid { grid-template-columns: 1fr; } }
+    .yn-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+    }
+    .yn-label { font-size: 14px; font-weight: 600; color: var(--text2); }
+
+    /* Color picker with live preview */
+    .color-input-wrap { display: flex; align-items: center; gap: 10px; }
+    .color-preview {
+      width: 36px; height: 36px;
+      border-radius: 8px;
+      border: 2px solid var(--border2);
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+
+    /* Coin Dealers grid */
+    .coin-dealer-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    @media(max-width:640px) { .coin-dealer-grid { grid-template-columns: 1fr; } }
+
+    /* ============================================================
+       SOCIAL MEDIA LINKS — Add/Edit Client social section
+    ============================================================ -->
+    */
+    .social-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media(max-width:600px) { .social-grid { grid-template-columns: 1fr; } }
+    .social-item {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+      transition: border-color 0.2s;
+    }
+    .social-item.enabled { border-color: var(--blue); }
+    .social-row { display: flex; align-items: center; gap: 10px; }
+    .social-icon {
+      width: 32px; height: 32px;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+    .social-icon.yt { background: rgba(255,0,0,0.12); color: #ff0000; border: 1px solid rgba(255,0,0,0.2); }
+    .social-icon.fb { background: rgba(24,119,242,0.12); color: #1877f2; border: 1px solid rgba(24,119,242,0.2); }
+    .social-icon.ig { background: rgba(225,48,108,0.12); color: #e1306c; border: 1px solid rgba(225,48,108,0.2); }
+    .social-icon.li { background: rgba(10,102,194,0.12); color: #0a66c2; border: 1px solid rgba(10,102,194,0.2); }
+    .social-icon.gg { background: rgba(66,133,244,0.12); color: #4285f4; border: 1px solid rgba(66,133,244,0.2); }
+    .social-icon.wa { background: rgba(37,211,102,0.12); color: #25d366; border: 1px solid rgba(37,211,102,0.2); }
+    .social-icon.ath { background: rgba(15,143,255,0.12); color: var(--blue); border: 1px solid rgba(15,143,255,0.2); }
+    .social-name { flex: 1; font-size: 14px; font-weight: 600; color: var(--text2); }
+    .social-url-input { display: none; margin-top: 10px; }
+
+    /* ============================================================
+       API CONFIGURATION CARDS
+    ============================================================ -->
+    */
+    .config-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 20px; }
+    .config-card {
+      background: var(--surface2);
+      border: 1px solid var(--border2);
+      border-radius: 14px;
+      overflow: hidden;
+    }
+    .config-card-header {
+      padding: 16px 20px;
+      border-bottom: 1px solid var(--border2);
+      background: rgba(15,143,255,0.04);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+    .config-provider-name { font-size: 17px; font-weight: 700; letter-spacing: 0.06em; }
+    .provider-upstox { color: var(--blue); }
+    .provider-gdf    { color: var(--green); }
+    .provider-samco  { color: var(--warning); }
+    .config-card-body { padding: 18px; }
+    .config-connection-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 10px 14px;
+      margin-bottom: 16px;
+    }
+
+    /* ============================================================
+       SCROLLABLE CONTENT — For long forms
+    ============================================================ -->
+    */
+    .scrollable-content {
+      max-height: calc(100vh - 160px);
+      overflow-y: auto;
+      padding-right: 4px;
+      scrollbar-width: thin;
+      scrollbar-color: var(--border2) transparent;
+    }
+    .scrollable-content::-webkit-scrollbar { width: 4px; }
+    .scrollable-content::-webkit-scrollbar-thumb { background: var(--border2); border-radius: 2px; }
+
+    /* Form action buttons bar */
+    .form-actions {
+      display: flex;
+      gap: 12px;
+      justify-content: flex-end;
+      padding: 16px 0 24px;
+    }
+
+    /* ============================================================
+       OTP INPUT BOXES — 6-digit OTP entry
+    ============================================================ -->
+    */
+    .otp-wrap { display: flex; gap: 10px; justify-content: center; margin: 20px 0; }
+    .otp-box {
+      width: 50px; height: 56px;
+      text-align: center;
+      font-size: 22px;
+      font-weight: 700;
+      background: rgba(15,143,255,0.05);
+      border: 1px solid var(--border2);
+      border-radius: 10px;
+      color: var(--text);
+      font-family: 'JetBrains Mono', monospace;
+      outline: none;
+      transition: all 0.2s;
+    }
+    .otp-box:focus { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(15,143,255,0.15); }
+
+    /* ============================================================
+       RESPONSIVE — Mobile/Tablet adjustments
+    ============================================================ -->
+    */
+    @media(max-width: 900px) {
+      :root { --sidebar-w: 0px; }
+      .sidebar { transform: translateX(-260px); width: 260px; }
+      .sidebar.open { transform: translateX(0); }
+      .sidebar-overlay.show { display: block; }
+      .content { margin-left: 0; width: 100%; }
+      .header-left { width: 60px; border-right: 1px solid var(--border2); justify-content: center; padding: 0; }
+      .header-brand-name { display: none; }
+      .hamburger { display: flex; position: static; }
+      .header-clock { display: none; }
+      .btn-logout { position: static; }
+      .header-right { justify-content: flex-end; padding: 0 12px; gap: 10px; }
+      .header-admin-label { font-size: 13px; letter-spacing: 0.04em; }
+    }
+    @media(max-width: 600px) {
+      .content { padding: 16px; }
+      .config-grid { grid-template-columns: 1fr; }
+      .page-header { flex-direction: column; align-items: flex-start; }
+      .header-admin-label { display: none; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- ============================================================
+       HEADER
+       Team: Replace "Super Admin" with logged-in username from session
+  ============================================================ -->
+  <header class="header">
+
+    <!-- Left: Logo + Brand Name -->
+    <div class="header-left">
+      <button class="hamburger" id="hamburger" onclick="toggleSidebar()">
+        <span></span><span></span><span></span>
+      </button>
+      <div class="header-brand-name">Innovative X</div>
+    </div>
+
+    <!-- Right: Admin Label + Clock + Logout -->
+    <div class="header-right">
+      <div class="header-admin-label"><span>Super</span> Admin</div>
+      <div class="header-clock" id="headerClock">--:--:--</div>
+      <!-- Team: logout should clear session/token and redirect to index.html -->
+      <a href="index.html" class="btn-logout">⏻ Logout</a>
+    </div>
+
+  </header>
+
+  <!-- ============================================================
+       MAIN LAYOUT
+  ============================================================ -->
+  <div class="layout">
+
+    <!-- Mobile sidebar backdrop -->
+    <div class="sidebar-overlay" id="sidebarOverlay" onclick="toggleSidebar()"></div>
+
+    <!-- ===========================================================
+         SIDEBAR NAVIGATION
+         Team: active state is handled by JS showPanel() function
+    =========================================================== -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-section">
+
+        <!-- Section Label -->
+        <div class="sidebar-section-label">⚡ Control Panel</div>
+
+        <!-- MCX API Section -->
+        <div class="nav-item" id="nav-mcx">
+          <div class="nav-link" onclick="toggleNav('nav-mcx')">
+            <span class="nav-icon">📡</span>
+            <span class="nav-label">MCX API</span>
+            <span class="nav-arrow">▶</span>
+          </div>
+          <div class="sub-nav">
+            <div class="sub-link" onclick="showPanel('market-watch')">Market Watch</div>
+            <div class="sub-link" onclick="showPanel('api-status')">API Status</div>
+            <div class="sub-link" onclick="showPanel('configuration')">Configuration</div>
+          </div>
+        </div>
+
+        <!-- Clients Section -->
+        <div class="nav-item" id="nav-clients">
+          <div class="nav-link" onclick="toggleNav('nav-clients')">
+            <span class="nav-icon">🏢</span>
+            <span class="nav-label">Clients</span>
+            <span class="nav-arrow">▶</span>
+          </div>
+          <div class="sub-nav">
+            <div class="sub-link" onclick="showPanel('add-client')">Add Client</div>
+            <div class="sub-link" onclick="showPanel('edit-client')">Edit Client</div>
+          </div>
+        </div>
+
+      </div>
+    </aside>
+
+    <!-- ===========================================================
+         CONTENT AREA — All panels live here
+    =========================================================== -->
+    <main class="content">
+
+      <!-- =========================================================
+           WELCOME PANEL — Default state
+      ========================================================= -->
+      <div class="panel active" id="panel-welcome">
+        <div style="display:flex; align-items:center; justify-content:center; height:calc(100vh - 160px); flex-direction:column; gap:16px; opacity:0.35;">
+          <img src="assets/logo.png" alt="Innovative X" style="height:80px; object-fit:contain; filter:grayscale(0.5);"/>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--muted); letter-spacing:0.12em;">SELECT AN OPTION FROM THE CONTROL PANEL</div>
+        </div>
+      </div>
+
+      <!-- =========================================================
+           MARKET WATCH PANEL
+           Team: fetch script list from GET /api/market-watch/scripts
+           Team: right-click context menu triggers Add/Edit/Delete APIs
+      ========================================================= -->
+      <div class="panel" id="panel-market-watch">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Market Watch</div>
+            <div class="page-breadcrumb">MCX API / <span>Market Watch</span></div>
+          </div>
+          <div class="page-actions">
+            <!-- Team: these buttons call openModal() which triggers API forms -->
+            <button class="btn btn-outline btn-sm" id="editScriptBtn" disabled onclick="openModal('modal-edit-script')">✏️ Edit Script</button>
+            <button class="btn btn-danger  btn-sm" id="deleteScriptBtn" disabled onclick="confirmDeleteScript()">🗑 Delete</button>
+            <button class="btn btn-primary btn-sm" onclick="openModal('modal-add-script')">+ Add Script</button>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span class="card-title-dot"></span> Live Scripts</div>
+            <!-- Team: show live script count from API -->
+            <div id="mwSelCount" style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted);">0 selected</div>
+          </div>
+          <div class="table-wrap">
+            <!-- Team: populate this tbody via GET /api/market-watch/scripts -->
+            <table id="mwTable">
+              <thead>
+                <tr>
+                  <th><input type="checkbox" class="row-check" id="mwSelectAll" onchange="mwToggleAll(this)"/></th>
+                  <th>Script</th>
+                  <th>Bid</th>
+                  <th>Ask</th>
+                  <th>High</th>
+                  <th>Low</th>
+                  <th>Last Updated</th>
+                  <th>Feed Provider</th>
+                </tr>
+              </thead>
+              <tbody id="mwTableBody">
+                <!-- Sample rows — Team: replace with dynamic data from API -->
+                <tr oncontextmenu="showCtxMenu(event, this)">
+                  <td><input type="checkbox" class="row-check mw-check" onchange="mwCheckChange()"/></td>
+                  <td class="td-mono">GOLD24</td>
+                  <td class="td-mono td-up">71,450.00</td>
+                  <td class="td-mono td-up">71,460.00</td>
+                  <td class="td-mono">71,890.00</td>
+                  <td class="td-mono">70,980.00</td>
+                  <td class="td-mono" style="color:var(--muted);">10:34:22 AM</td>
+                  <td><span class="badge badge-blue"><span class="badge-dot"></span>UPSTOX</span></td>
+                </tr>
+                <tr oncontextmenu="showCtxMenu(event, this)">
+                  <td><input type="checkbox" class="row-check mw-check" onchange="mwCheckChange()"/></td>
+                  <td class="td-mono">SILVER</td>
+                  <td class="td-mono td-down">84,200.00</td>
+                  <td class="td-mono td-down">84,230.00</td>
+                  <td class="td-mono">85,100.00</td>
+                  <td class="td-mono">83,500.00</td>
+                  <td class="td-mono" style="color:var(--muted);">10:34:21 AM</td>
+                  <td><span class="badge badge-green"><span class="badge-dot"></span>GDF</span></td>
+                </tr>
+                <tr oncontextmenu="showCtxMenu(event, this)">
+                  <td><input type="checkbox" class="row-check mw-check" onchange="mwCheckChange()"/></td>
+                  <td class="td-mono">CRUDEOIL</td>
+                  <td class="td-mono td-up">6,721.00</td>
+                  <td class="td-mono td-up">6,725.00</td>
+                  <td class="td-mono">6,800.00</td>
+                  <td class="td-mono">6,650.00</td>
+                  <td class="td-mono" style="color:var(--muted);">10:34:20 AM</td>
+                  <td><span class="badge badge-red"><span class="badge-dot"></span>SAMCO</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted); margin-top:10px; letter-spacing:0.05em;">
+          💡 Right-click any row for quick actions &nbsp;|&nbsp; Tick checkbox to enable Edit / Delete buttons
+        </p>
+      </div>
+
+      <!-- =========================================================
+           API STATUS PANEL
+           Team: fetch client list from GET /api/clients
+           Team: toggle calls PUT /api/clients/:id/api-access
+           Team: connect calls POST /api/clients/:id/connect
+           Team: disconnect calls POST /api/clients/:id/disconnect
+      ========================================================= -->
+      <div class="panel" id="panel-api-status">
+        <div class="page-header">
+          <div>
+            <div class="page-title">API Status</div>
+            <div class="page-breadcrumb">MCX API / <span>API Status</span></div>
+          </div>
+        </div>
+
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span class="card-title-dot"></span> Client API Access Control</div>
+          </div>
+          <div class="table-wrap">
+            <!-- Team: replace with dynamic rows from GET /api/clients -->
+            <table>
+              <thead>
+                <tr>
+                  <th>Client Name</th>
+                  <th>Status</th>
+                  <th>API Access</th>
+                  <th>Connect</th>
+                  <th>Disconnect</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-weight:600;">Client A — Bullion Hub</td>
+                  <td>
+                    <div class="status-light">
+                      <span class="status-dot connected"></span>
+                      <span style="color:var(--success); font-size:12px;">Connected</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="toggle-wrap">
+                      <label class="toggle"><input type="checkbox" checked onchange="updateApiToggleLabel(this)"/><span class="toggle-slider"></span></label>
+                      <span class="toggle-label">ON</span>
+                    </div>
+                  </td>
+                  <td><button class="btn btn-success btn-sm">⚡ Connect</button></td>
+                  <td><button class="btn btn-danger btn-sm">✕ Disconnect</button></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600;">Client B — Gold Mart</td>
+                  <td>
+                    <div class="status-light">
+                      <span class="status-dot connected"></span>
+                      <span style="color:var(--success); font-size:12px;">Connected</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="toggle-wrap">
+                      <label class="toggle"><input type="checkbox" checked onchange="updateApiToggleLabel(this)"/><span class="toggle-slider"></span></label>
+                      <span class="toggle-label">ON</span>
+                    </div>
+                  </td>
+                  <td><button class="btn btn-success btn-sm">⚡ Connect</button></td>
+                  <td><button class="btn btn-danger btn-sm">✕ Disconnect</button></td>
+                </tr>
+                <tr>
+                  <td style="font-weight:600;">Client C — Silver Palace</td>
+                  <td>
+                    <div class="status-light">
+                      <span class="status-dot disconnected"></span>
+                      <span style="color:var(--error); font-size:12px;">Disconnected</span>
+                    </div>
+                  </td>
+                  <td>
+                    <div class="toggle-wrap">
+                      <label class="toggle"><input type="checkbox" onchange="updateApiToggleLabel(this)"/><span class="toggle-slider"></span></label>
+                      <span class="toggle-label">OFF</span>
+                    </div>
+                  </td>
+                  <td><button class="btn btn-success btn-sm">⚡ Connect</button></td>
+                  <td><button class="btn btn-danger btn-sm">✕ Disconnect</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- =========================================================
+           CONFIGURATION PANEL
+           Team: load saved config from GET /api/config/:provider
+           Team: save config via POST /api/config/:provider
+           Team: connected status from GET /api/config/:provider/status
+      ========================================================= -->
+      <div class="panel" id="panel-configuration">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Configuration</div>
+            <div class="page-breadcrumb">MCX API / <span>Configuration</span></div>
+          </div>
+        </div>
+
+        <div class="config-grid">
+
+          <!-- UPSTOX Config Card -->
+          <div class="config-card">
+            <div class="config-card-header">
+              <div class="config-provider-name provider-upstox">⚡ UPSTOX</div>
+              <div class="toggle-wrap">
+                <label class="toggle"><input type="checkbox" checked onchange="updateApiToggleLabel(this)"/><span class="toggle-slider"></span></label>
+                <span class="toggle-label">Active</span>
+              </div>
+            </div>
+            <div class="config-card-body">
+              <!-- Connection status indicator -->
+              <div class="config-connection-bar">
+                <span style="font-size:13px; font-weight:600; color:var(--text2);">Connection</span>
+                <div class="status-light">
+                  <span class="status-dot connected"></span>
+                  <span style="color:var(--success); font-size:12px;">Connected</span>
+                </div>
+              </div>
+              <!-- Team: fields map to UPSTOX API credentials -->
+              <div class="form-group">
+                <label class="form-label">Username / Client ID</label>
+                <input class="form-input" type="text" name="upstox_username" placeholder="Enter username"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Password / API Key</label>
+                <input class="form-input" type="password" name="upstox_password" placeholder="••••••••••••"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Mobile Number</label>
+                <input class="form-input" type="tel" name="upstox_mobile" placeholder="+91 XXXXX XXXXX"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email</label>
+                <input class="form-input" type="email" name="upstox_email" placeholder="api@upstox.com"/>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Sender Company ID</label>
+                  <input class="form-input" type="text" name="upstox_sender_id" placeholder="SENDER001"/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Target Company ID</label>
+                  <input class="form-input" type="text" name="upstox_target_id" placeholder="TARGET001"/>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">IP Address</label>
+                  <input class="form-input" type="text" name="upstox_ip" placeholder="192.168.1.1"/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Port</label>
+                  <input class="form-input" type="number" name="upstox_port" placeholder="8080"/>
+                </div>
+              </div>
+              <!-- Team: POST /api/config/upstox on click -->
+              <button class="btn btn-primary" style="width:100%; margin-top:4px;">Save UPSTOX Config</button>
+            </div>
+          </div>
+
+          <!-- GDF Config Card -->
+          <div class="config-card">
+            <div class="config-card-header">
+              <div class="config-provider-name provider-gdf">🌐 GDF</div>
+              <div class="toggle-wrap">
+                <label class="toggle"><input type="checkbox" onchange="updateApiToggleLabel(this)"/><span class="toggle-slider"></span></label>
+                <span class="toggle-label">Inactive</span>
+              </div>
+            </div>
+            <div class="config-card-body">
+              <div class="config-connection-bar">
+                <span style="font-size:13px; font-weight:600; color:var(--text2);">Connection</span>
+                <div class="status-light">
+                  <span class="status-dot disconnected"></span>
+                  <span style="color:var(--error); font-size:12px;">Disconnected</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Username / Client ID</label>
+                <input class="form-input" type="text" name="gdf_username" placeholder="Enter username"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Password / API Key</label>
+                <input class="form-input" type="password" name="gdf_password" placeholder="••••••••••••"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Mobile Number</label>
+                <input class="form-input" type="tel" name="gdf_mobile" placeholder="+91 XXXXX XXXXX"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email</label>
+                <input class="form-input" type="email" name="gdf_email" placeholder="api@gdf.com"/>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Sender Company ID</label>
+                  <input class="form-input" type="text" name="gdf_sender_id" placeholder="SENDER001"/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Target Company ID</label>
+                  <input class="form-input" type="text" name="gdf_target_id" placeholder="TARGET001"/>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">IP Address</label>
+                  <input class="form-input" type="text" name="gdf_ip" placeholder="192.168.1.1"/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Port</label>
+                  <input class="form-input" type="number" name="gdf_port" placeholder="8080"/>
+                </div>
+              </div>
+              <button class="btn btn-primary" style="width:100%; margin-top:4px;">Save GDF Config</button>
+            </div>
+          </div>
+
+          <!-- SAMCO Config Card -->
+          <div class="config-card">
+            <div class="config-card-header">
+              <div class="config-provider-name provider-samco">🔶 SAMCO</div>
+              <div class="toggle-wrap">
+                <label class="toggle"><input type="checkbox" onchange="updateApiToggleLabel(this)"/><span class="toggle-slider"></span></label>
+                <span class="toggle-label">Inactive</span>
+              </div>
+            </div>
+            <div class="config-card-body">
+              <div class="config-connection-bar">
+                <span style="font-size:13px; font-weight:600; color:var(--text2);">Connection</span>
+                <div class="status-light">
+                  <span class="status-dot disconnected"></span>
+                  <span style="color:var(--error); font-size:12px;">Disconnected</span>
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Username / Client ID</label>
+                <input class="form-input" type="text" name="samco_username" placeholder="Enter username"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Password / API Key</label>
+                <input class="form-input" type="password" name="samco_password" placeholder="••••••••••••"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Mobile Number</label>
+                <input class="form-input" type="tel" name="samco_mobile" placeholder="+91 XXXXX XXXXX"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Email</label>
+                <input class="form-input" type="email" name="samco_email" placeholder="api@samco.com"/>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Sender Company ID</label>
+                  <input class="form-input" type="text" name="samco_sender_id" placeholder="SENDER001"/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Target Company ID</label>
+                  <input class="form-input" type="text" name="samco_target_id" placeholder="TARGET001"/>
+                </div>
+              </div>
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">IP Address</label>
+                  <input class="form-input" type="text" name="samco_ip" placeholder="192.168.1.1"/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Port</label>
+                  <input class="form-input" type="number" name="samco_port" placeholder="8080"/>
+                </div>
+              </div>
+              <button class="btn btn-primary" style="width:100%; margin-top:4px;">Save SAMCO Config</button>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- =========================================================
+           ADD CLIENT PANEL
+           Team: POST /api/clients on Submit
+           Team: all input name attributes are API field keys
+      ========================================================= -->
+      <div class="panel" id="panel-add-client">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Add Client</div>
+            <div class="page-breadcrumb">Clients / <span>Add Client</span></div>
+          </div>
+        </div>
+
+        <div class="scrollable-content">
+
+          <!-- Basic Information -->
+          <div class="form-section">
+            <div class="form-section-header">
+              <div class="form-section-title">Basic Information</div>
+            </div>
+            <div class="form-section-body">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Company Name *</label>
+                  <input class="form-input" type="text" name="company_name" placeholder="e.g. Bullion Hub Pvt. Ltd." required/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Email Address *</label>
+                  <input class="form-input" type="email" name="email" placeholder="contact@company.com" required/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Mobile Number *</label>
+                  <input class="form-input" type="tel" name="mobile" placeholder="+91 XXXXX XXXXX" required/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Admin Features -->
+          <div class="form-section">
+            <div class="form-section-header">
+              <div class="form-section-title">Admin Features</div>
+            </div>
+            <div class="form-section-body">
+              <div class="yn-grid">
+                <div class="yn-item">
+                  <span class="yn-label">Bullion with GST</span>
+                  <label class="toggle"><input type="checkbox" name="bullion_with_gst" checked/><span class="toggle-slider"></span></label>
+                </div>
+                <div class="yn-item">
+                  <span class="yn-label">Bullion Without GST</span>
+                  <label class="toggle"><input type="checkbox" name="bullion_without_gst"/><span class="toggle-slider"></span></label>
+                </div>
+                <div class="yn-item">
+                  <span class="yn-label">Coins</span>
+                  <!-- Team: coins toggle shows/hides Coin Dealers section -->
+                  <label class="toggle"><input type="checkbox" name="coins" id="addCoinsToggle" onchange="toggleCoinDealers('add', this)"/><span class="toggle-slider"></span></label>
+                </div>
+                <div class="yn-item">
+                  <span class="yn-label">Live Header Rates</span>
+                  <label class="toggle"><input type="checkbox" name="live_header_rates" checked/><span class="toggle-slider"></span></label>
+                </div>
+                <div class="yn-item">
+                  <span class="yn-label">Live MCX Prices</span>
+                  <label class="toggle"><input type="checkbox" name="live_mcx_prices" checked/><span class="toggle-slider"></span></label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Coin Dealers — shows only when Coins is ON (Optional) -->
+          <div class="form-section" id="add-coin-dealers" style="display:none;">
+            <div class="form-section-header">
+              <div class="form-section-title" style="color:var(--green);">🪙 Coin Dealers <small style="font-weight:400; color:var(--muted); font-size:12px; margin-left:8px;">(Optional)</small></div>
+            </div>
+            <div class="form-section-body">
+              <div class="coin-dealer-grid">
+                <div class="form-group">
+                  <label class="form-label">Dealer 1</label>
+                  <input class="form-input" type="text" name="coin_dealer_1" value="KUNDAN" placeholder="Dealer name"/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Dealer 2</label>
+                  <input class="form-input" type="text" name="coin_dealer_2" value="MMTC PAMP" placeholder="Dealer name"/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Dealer 3</label>
+                  <input class="form-input" type="text" name="coin_dealer_3" value="ELITE" placeholder="Dealer name"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Frontend Pages -->
+          <div class="form-section">
+            <div class="form-section-header">
+              <div class="form-section-title">Frontend Pages</div>
+            </div>
+            <div class="form-section-body">
+              <div class="yn-grid">
+                <div class="yn-item">
+                  <span class="yn-label">Bank Details</span>
+                  <label class="toggle"><input type="checkbox" name="page_bank_details" checked/><span class="toggle-slider"></span></label>
+                </div>
+                <div class="yn-item">
+                  <span class="yn-label">About Us</span>
+                  <label class="toggle"><input type="checkbox" name="page_about_us" checked/><span class="toggle-slider"></span></label>
+                </div>
+                <div class="yn-item">
+                  <span class="yn-label">Contact Us</span>
+                  <label class="toggle"><input type="checkbox" name="page_contact_us" checked/><span class="toggle-slider"></span></label>
+                </div>
+                <div class="yn-item">
+                  <span class="yn-label">Booking Desk</span>
+                  <label class="toggle"><input type="checkbox" name="page_booking_desk"/><span class="toggle-slider"></span></label>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Website Contact Details -->
+          <div class="form-section">
+            <div class="form-section-header">
+              <div class="form-section-title">Website Contact Details</div>
+            </div>
+            <div class="form-section-body">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Company Name on Website *</label>
+                  <input class="form-input" type="text" name="website_company_name" placeholder="Name shown on client's website" required/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Email 1 *</label>
+                  <input class="form-input" type="email" name="website_email_1" placeholder="primary@company.com" required/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Email 2</label>
+                  <input class="form-input" type="email" name="website_email_2" placeholder="secondary@company.com"/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Mobile 1 *</label>
+                  <input class="form-input" type="tel" name="website_mobile_1" placeholder="+91 XXXXX XXXXX" required/>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Mobile 2</label>
+                  <input class="form-input" type="tel" name="website_mobile_2" placeholder="+91 XXXXX XXXXX"/>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Theme Colors -->
+          <div class="form-section">
+            <div class="form-section-header">
+              <div class="form-section-title">Theme Colors</div>
+            </div>
+            <div class="form-section-body">
+              <div class="form-row">
+                <div class="form-group">
+                  <label class="form-label">Primary Color *</label>
+                  <div class="color-input-wrap">
+                    <div class="color-preview" id="add-primary-preview" style="background:#0f8fff;"></div>
+                    <input class="form-input" type="text" id="add-primary-hex" name="color_primary" value="#0f8fff" maxlength="7" placeholder="#000000" oninput="liveColorPreview('add-primary-hex','add-primary-preview')"/>
+                  </div>
+                </div>
+                <div class="form-group">
+                  <label class="form-label">Secondary Color *</label>
+                  <div class="color-input-wrap">
+                    <div class="color-preview" id="add-secondary-preview" style="background:#aaee00;"></div>
+                    <input class="form-input" type="text" id="add-secondary-hex" name="color_secondary" value="#aaee00" maxlength="7" placeholder="#000000" oninput="liveColorPreview('add-secondary-hex','add-secondary-preview')"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Social Media Links -->
+          <div class="form-section">
+            <div class="form-section-header">
+              <div class="form-section-title">Social Media Links</div>
+            </div>
+            <div class="form-section-body">
+              <div class="social-grid">
+
+                <!-- YouTube -->
+                <div class="social-item" id="social-add-yt">
+                  <div class="social-row">
+                    <span class="social-icon yt"><i class="fab fa-youtube"></i></span>
+                    <span class="social-name">YouTube</span>
+                    <label class="toggle"><input type="checkbox" name="social_youtube_enabled" onchange="toggleSocialUrl(this, 'social-add-yt')"/><span class="toggle-slider"></span></label>
+                  </div>
+                  <input class="form-input social-url-input" type="url" name="social_youtube_url" placeholder="https://youtube.com/@channel"/>
+                </div>
+
+                <!-- Facebook -->
+                <div class="social-item" id="social-add-fb">
+                  <div class="social-row">
+                    <span class="social-icon fb"><i class="fab fa-facebook-f"></i></span>
+                    <span class="social-name">Facebook</span>
+                    <label class="toggle"><input type="checkbox" name="social_facebook_enabled" onchange="toggleSocialUrl(this, 'social-add-fb')"/><span class="toggle-slider"></span></label>
+                  </div>
+                  <input class="form-input social-url-input" type="url" name="social_facebook_url" placeholder="https://facebook.com/page"/>
+                </div>
+
+                <!-- Instagram -->
+                <div class="social-item" id="social-add-ig">
+                  <div class="social-row">
+                    <span class="social-icon ig"><i class="fab fa-instagram"></i></span>
+                    <span class="social-name">Instagram</span>
+                    <label class="toggle"><input type="checkbox" name="social_instagram_enabled" onchange="toggleSocialUrl(this, 'social-add-ig')"/><span class="toggle-slider"></span></label>
+                  </div>
+                  <input class="form-input social-url-input" type="url" name="social_instagram_url" placeholder="https://instagram.com/profile"/>
+                </div>
+
+                <!-- LinkedIn -->
+                <div class="social-item" id="social-add-li">
+                  <div class="social-row">
+                    <span class="social-icon li"><i class="fab fa-linkedin-in"></i></span>
+                    <span class="social-name">LinkedIn</span>
+                    <label class="toggle"><input type="checkbox" name="social_linkedin_enabled" onchange="toggleSocialUrl(this, 'social-add-li')"/><span class="toggle-slider"></span></label>
+                  </div>
+                  <input class="form-input social-url-input" type="url" name="social_linkedin_url" placeholder="https://linkedin.com/company"/>
+                </div>
+
+                <!-- Google -->
+                <div class="social-item" id="social-add-gg">
+                  <div class="social-row">
+                    <span class="social-icon gg"><i class="fab fa-google"></i></span>
+                    <span class="social-name">Google</span>
+                    <label class="toggle"><input type="checkbox" name="social_google_enabled" onchange="toggleSocialUrl(this, 'social-add-gg')"/><span class="toggle-slider"></span></label>
+                  </div>
+                  <input class="form-input social-url-input" type="url" name="social_google_url" placeholder="https://g.page/business"/>
+                </div>
+
+                <!-- WhatsApp Chat Button -->
+                <div class="social-item" id="social-add-wa">
+                  <div class="social-row">
+                    <span class="social-icon wa"><i class="fab fa-whatsapp"></i></span>
+                    <span class="social-name">WhatsApp Chat</span>
+                    <label class="toggle"><input type="checkbox" name="social_whatsapp_enabled" onchange="toggleSocialUrl(this, 'social-add-wa')"/><span class="toggle-slider"></span></label>
+                  </div>
+                  <input class="form-input social-url-input" type="url" name="social_whatsapp_url" placeholder="https://wa.me/919XXXXXXXXX"/>
+                </div>
+
+                <!-- Add to Home Screen -->
+                <div class="social-item" id="social-add-ath">
+                  <div class="social-row">
+                    <span class="social-icon ath"><i class="fas fa-plus-square"></i></span>
+                    <span class="social-name">Add to Home Screen</span>
+                    <label class="toggle"><input type="checkbox" name="add_to_home_screen"/><span class="toggle-slider"></span></label>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+          </div>
+
+          <!-- Form Action Buttons -->
+          <div class="form-actions">
+            <button class="btn btn-outline" onclick="showPanel('welcome')">Cancel</button>
+            <!-- Team: collect all form data and POST /api/clients -->
+            <button class="btn btn-success">✓ Submit Client</button>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- =========================================================
+           EDIT CLIENT PANEL
+           Team: GET /api/clients to populate dropdown
+           Team: GET /api/clients/:id to load client data
+           Team: PUT /api/clients/:id on Submit
+           Team: DELETE /api/clients/:id after OTP verified
+      ========================================================= -->
+      <div class="panel" id="panel-edit-client">
+        <div class="page-header">
+          <div>
+            <div class="page-title">Edit Client</div>
+            <div class="page-breadcrumb">Clients / <span>Edit Client</span></div>
+          </div>
+        </div>
+
+        <!-- Client Selector -->
+        <div class="card">
+          <div class="card-header">
+            <div class="card-title"><span class="card-title-dot"></span> Select Client</div>
+          </div>
+          <div style="padding:16px 20px;">
+            <!-- Team: populate options from GET /api/clients -->
+            <select class="form-select" id="editClientSelect" onchange="loadClientData(this.value)" style="max-width:420px;">
+              <option value="">— Choose a client to edit —</option>
+              <option value="1">Client A — Bullion Hub</option>
+              <option value="2">Client B — Gold Mart</option>
+              <option value="3">Client C — Silver Palace</option>
+            </select>
+          </div>
+        </div>
+
+        <!-- Edit Form — hidden until client selected -->
+        <div id="editClientFormWrap" style="display:none;">
+          <div class="scrollable-content">
+
+            <!-- Basic Information -->
+            <div class="form-section">
+              <div class="form-section-header"><div class="form-section-title">Basic Information</div></div>
+              <div class="form-section-body">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Company Name *</label>
+                    <input class="form-input" type="text" id="e-company" name="company_name" required/>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Email Address *</label>
+                    <input class="form-input" type="email" id="e-email" name="email" required/>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Mobile Number *</label>
+                    <input class="form-input" type="tel" id="e-mobile" name="mobile" required/>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Admin Features -->
+            <div class="form-section">
+              <div class="form-section-header"><div class="form-section-title">Admin Features</div></div>
+              <div class="form-section-body">
+                <div class="yn-grid">
+                  <div class="yn-item"><span class="yn-label">Bullion with GST</span><label class="toggle"><input type="checkbox" id="e-bullion-gst" name="bullion_with_gst"/><span class="toggle-slider"></span></label></div>
+                  <div class="yn-item"><span class="yn-label">Bullion Without GST</span><label class="toggle"><input type="checkbox" id="e-bullion-nogst" name="bullion_without_gst"/><span class="toggle-slider"></span></label></div>
+                  <div class="yn-item"><span class="yn-label">Coins</span><label class="toggle"><input type="checkbox" id="e-coins" name="coins" onchange="toggleCoinDealers('edit', this)"/><span class="toggle-slider"></span></label></div>
+                  <div class="yn-item"><span class="yn-label">Live Header Rates</span><label class="toggle"><input type="checkbox" id="e-header" name="live_header_rates"/><span class="toggle-slider"></span></label></div>
+                  <div class="yn-item"><span class="yn-label">Live MCX Prices</span><label class="toggle"><input type="checkbox" id="e-mcx" name="live_mcx_prices"/><span class="toggle-slider"></span></label></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Coin Dealers (Optional - shows when Coins ON) -->
+            <div class="form-section" id="edit-coin-dealers" style="display:none;">
+              <div class="form-section-header">
+                <div class="form-section-title" style="color:var(--green);">🪙 Coin Dealers <small style="font-weight:400; color:var(--muted); font-size:12px; margin-left:8px;">(Optional)</small></div>
+              </div>
+              <div class="form-section-body">
+                <div class="coin-dealer-grid">
+                  <div class="form-group"><label class="form-label">Dealer 1</label><input class="form-input" type="text" id="e-dealer1" name="coin_dealer_1"/></div>
+                  <div class="form-group"><label class="form-label">Dealer 2</label><input class="form-input" type="text" id="e-dealer2" name="coin_dealer_2"/></div>
+                  <div class="form-group"><label class="form-label">Dealer 3</label><input class="form-input" type="text" id="e-dealer3" name="coin_dealer_3"/></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Frontend Pages -->
+            <div class="form-section">
+              <div class="form-section-header"><div class="form-section-title">Frontend Pages</div></div>
+              <div class="form-section-body">
+                <div class="yn-grid">
+                  <div class="yn-item"><span class="yn-label">Bank Details</span><label class="toggle"><input type="checkbox" id="e-bank" name="page_bank_details"/><span class="toggle-slider"></span></label></div>
+                  <div class="yn-item"><span class="yn-label">About Us</span><label class="toggle"><input type="checkbox" id="e-about" name="page_about_us"/><span class="toggle-slider"></span></label></div>
+                  <div class="yn-item"><span class="yn-label">Contact Us</span><label class="toggle"><input type="checkbox" id="e-contact" name="page_contact_us"/><span class="toggle-slider"></span></label></div>
+                  <div class="yn-item"><span class="yn-label">Booking Desk</span><label class="toggle"><input type="checkbox" id="e-booking" name="page_booking_desk"/><span class="toggle-slider"></span></label></div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Website Contact Details -->
+            <div class="form-section">
+              <div class="form-section-header"><div class="form-section-title">Website Contact Details</div></div>
+              <div class="form-section-body">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Company Name on Website *</label>
+                    <input class="form-input" type="text" id="e-web-company" name="website_company_name" required/>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Email 1 *</label>
+                    <input class="form-input" type="email" id="e-em1" name="website_email_1" required/>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Email 2</label>
+                    <input class="form-input" type="email" id="e-em2" name="website_email_2"/>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Mobile 1 *</label>
+                    <input class="form-input" type="tel" id="e-mob1" name="website_mobile_1" required/>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Mobile 2</label>
+                    <input class="form-input" type="tel" id="e-mob2" name="website_mobile_2"/>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Theme Colors -->
+            <div class="form-section">
+              <div class="form-section-header"><div class="form-section-title">Theme Colors</div></div>
+              <div class="form-section-body">
+                <div class="form-row">
+                  <div class="form-group">
+                    <label class="form-label">Primary Color *</label>
+                    <div class="color-input-wrap">
+                      <div class="color-preview" id="edit-primary-preview"></div>
+                      <input class="form-input" type="text" id="edit-primary-hex" name="color_primary" maxlength="7" oninput="liveColorPreview('edit-primary-hex','edit-primary-preview')"/>
+                    </div>
+                  </div>
+                  <div class="form-group">
+                    <label class="form-label">Secondary Color *</label>
+                    <div class="color-input-wrap">
+                      <div class="color-preview" id="edit-secondary-preview"></div>
+                      <input class="form-input" type="text" id="edit-secondary-hex" name="color_secondary" maxlength="7" oninput="liveColorPreview('edit-secondary-hex','edit-secondary-preview')"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <!-- Social Media Links -->
+            <div class="form-section">
+              <div class="form-section-header"><div class="form-section-title">Social Media Links</div></div>
+              <div class="form-section-body">
+                <div class="social-grid">
+                  <div class="social-item" id="social-edit-yt">
+                    <div class="social-row">
+                      <span class="social-icon yt"><i class="fab fa-youtube"></i></span>
+                      <span class="social-name">YouTube</span>
+                      <label class="toggle"><input type="checkbox" id="e-yt-on" name="social_youtube_enabled" onchange="toggleSocialUrl(this, 'social-edit-yt')"/><span class="toggle-slider"></span></label>
+                    </div>
+                    <input class="form-input social-url-input" type="url" id="e-yt-url" name="social_youtube_url" placeholder="https://youtube.com/@channel"/>
+                  </div>
+                  <div class="social-item" id="social-edit-fb">
+                    <div class="social-row">
+                      <span class="social-icon fb"><i class="fab fa-facebook-f"></i></span>
+                      <span class="social-name">Facebook</span>
+                      <label class="toggle"><input type="checkbox" id="e-fb-on" name="social_facebook_enabled" onchange="toggleSocialUrl(this, 'social-edit-fb')"/><span class="toggle-slider"></span></label>
+                    </div>
+                    <input class="form-input social-url-input" type="url" id="e-fb-url" name="social_facebook_url" placeholder="https://facebook.com/page"/>
+                  </div>
+                  <div class="social-item" id="social-edit-ig">
+                    <div class="social-row">
+                      <span class="social-icon ig"><i class="fab fa-instagram"></i></span>
+                      <span class="social-name">Instagram</span>
+                      <label class="toggle"><input type="checkbox" id="e-ig-on" name="social_instagram_enabled" onchange="toggleSocialUrl(this, 'social-edit-ig')"/><span class="toggle-slider"></span></label>
+                    </div>
+                    <input class="form-input social-url-input" type="url" id="e-ig-url" name="social_instagram_url" placeholder="https://instagram.com/profile"/>
+                  </div>
+                  <div class="social-item" id="social-edit-li">
+                    <div class="social-row">
+                      <span class="social-icon li"><i class="fab fa-linkedin-in"></i></span>
+                      <span class="social-name">LinkedIn</span>
+                      <label class="toggle"><input type="checkbox" id="e-li-on" name="social_linkedin_enabled" onchange="toggleSocialUrl(this, 'social-edit-li')"/><span class="toggle-slider"></span></label>
+                    </div>
+                    <input class="form-input social-url-input" type="url" id="e-li-url" name="social_linkedin_url" placeholder="https://linkedin.com/company"/>
+                  </div>
+                  <div class="social-item" id="social-edit-gg">
+                    <div class="social-row">
+                      <span class="social-icon gg"><i class="fab fa-google"></i></span>
+                      <span class="social-name">Google</span>
+                      <label class="toggle"><input type="checkbox" id="e-gg-on" name="social_google_enabled" onchange="toggleSocialUrl(this, 'social-edit-gg')"/><span class="toggle-slider"></span></label>
+                    </div>
+                    <input class="form-input social-url-input" type="url" id="e-gg-url" name="social_google_url" placeholder="https://g.page/business"/>
+                  </div>
+
+                  <!-- WhatsApp Chat Button -->
+                  <div class="social-item" id="social-edit-wa">
+                    <div class="social-row">
+                      <span class="social-icon wa"><i class="fab fa-whatsapp"></i></span>
+                      <span class="social-name">WhatsApp Chat</span>
+                      <label class="toggle"><input type="checkbox" id="e-wa-on" name="social_whatsapp_enabled" onchange="toggleSocialUrl(this, 'social-edit-wa')"/><span class="toggle-slider"></span></label>
+                    </div>
+                    <input class="form-input social-url-input" type="url" id="e-wa-url" name="social_whatsapp_url" placeholder="https://wa.me/919XXXXXXXXX"/>
+                  </div>
+
+                  <!-- Add to Home Screen -->
+                  <div class="social-item" id="social-edit-ath">
+                    <div class="social-row">
+                      <span class="social-icon ath"><i class="fas fa-plus-square"></i></span>
+                      <span class="social-name">Add to Home Screen</span>
+                      <label class="toggle"><input type="checkbox" id="e-ath-on" name="add_to_home_screen"/><span class="toggle-slider"></span></label>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <!-- Form Buttons — Submit + Cancel + Delete -->
+            <div class="form-actions">
+              <!-- Delete: opens OTP modal first -->
+              <button class="btn btn-danger" onclick="openModal('modal-delete-otp')" style="margin-right:auto;">🗑 Delete Client</button>
+              <button class="btn btn-outline" onclick="showPanel('welcome')">Cancel</button>
+              <!-- Team: PUT /api/clients/:id with form data -->
+              <button class="btn btn-success">✓ Submit Changes</button>
+            </div>
+
+          </div>
+        </div>
+      </div>
+
+    </main>
+  </div>
+
+  <!-- ============================================================
+       CONTEXT MENU — Right-click on Market Watch rows
+  ============================================================ -->
+  <div class="ctx-menu" id="ctxMenu">
+    <div class="ctx-item" onclick="ctxAdd()">➕ Add Script</div>
+    <div class="ctx-sep"></div>
+    <div class="ctx-item ctx-edit" onclick="ctxEdit()">✏️ Edit Script</div>
+    <div class="ctx-item ctx-delete" onclick="ctxDelete()">🗑️ Delete Script</div>
+  </div>
+
+  <!-- ============================================================
+       MODAL: ADD SCRIPT
+       Team: POST /api/market-watch/scripts on submit
+  ============================================================ -->
+  <div class="modal-overlay" id="modal-add-script">
+    <div class="modal modal-md">
+      <div class="modal-topbar"></div>
+      <div class="modal-header">
+        <div class="modal-title">➕ Add Script</div>
+        <button class="modal-close-btn" onclick="closeModal('modal-add-script')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Script Name *</label>
+          <input class="form-input" type="text" name="script_name" placeholder="e.g. GOLD24, SILVER, CRUDEOIL" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Select Server (Feed Provider) *</label>
+          <!-- Team: map to provider ID for API integration -->
+          <select class="form-select" name="feed_provider">
+            <option value="">— Select feed provider —</option>
+            <option value="upstox">UPSTOX</option>
+            <option value="gdf">GDF</option>
+            <option value="samco">SAMCO</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Instrument Name *</label>
+          <input class="form-input" type="text" name="instrument_name" placeholder="e.g. MCX:GOLD24NOVFUT" required/>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('modal-add-script')">Cancel</button>
+        <!-- Team: POST /api/market-watch/scripts -->
+        <button class="btn btn-primary">Add Script</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODAL: EDIT SCRIPT
+       Team: PUT /api/market-watch/scripts/:id on submit
+  ============================================================ -->
+  <div class="modal-overlay" id="modal-edit-script">
+    <div class="modal modal-md">
+      <div class="modal-topbar"></div>
+      <div class="modal-header">
+        <div class="modal-title">✏️ Edit Script</div>
+        <button class="modal-close-btn" onclick="closeModal('modal-edit-script')">✕</button>
+      </div>
+      <div class="modal-body">
+        <div class="form-group">
+          <label class="form-label">Script Name *</label>
+          <input class="form-input" type="text" id="edit-script-name" name="script_name" required/>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Select Server (Feed Provider) *</label>
+          <select class="form-select" id="edit-script-provider" name="feed_provider">
+            <option value="upstox">UPSTOX</option>
+            <option value="gdf">GDF</option>
+            <option value="samco">SAMCO</option>
+          </select>
+        </div>
+        <div class="form-group">
+          <label class="form-label">Instrument Name *</label>
+          <input class="form-input" type="text" id="edit-script-instrument" name="instrument_name" required/>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('modal-edit-script')">Cancel</button>
+        <!-- Team: PUT /api/market-watch/scripts/:id -->
+        <button class="btn btn-primary">Save Changes</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODAL: DELETE SCRIPT CONFIRMATION
+       Team: DELETE /api/market-watch/scripts/:id after confirmed
+  ============================================================ -->
+  <div class="modal-overlay" id="modal-delete-script">
+    <div class="modal modal-sm">
+      <div class="modal-topbar danger"></div>
+      <div class="modal-body" style="padding:32px 24px; text-align:center;">
+        <div style="font-size:44px; margin-bottom:16px;">⚠️</div>
+        <div style="font-size:16px; color:var(--text2); margin-bottom:8px;">Are you sure you want to delete this script?</div>
+        <div id="deleteScriptLabel" style="font-size:18px; font-weight:700; color:var(--error); margin-bottom:24px;">GOLD24</div>
+        <div style="display:flex; gap:10px; justify-content:center;">
+          <button class="btn btn-outline" onclick="closeModal('modal-delete-script')">Cancel</button>
+          <button class="btn btn-danger" onclick="executeDeleteScript()">Yes, Delete</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       MODAL: DELETE CLIENT — OTP Verification Required
+       Team: Step 1 → POST /api/clients/:id/send-delete-otp (sends OTP to client email)
+       Team: Step 2 → DELETE /api/clients/:id with OTP in body
+  ============================================================ -->
+  <div class="modal-overlay" id="modal-delete-otp">
+    <div class="modal modal-sm">
+      <div class="modal-topbar danger"></div>
+      <div class="modal-header">
+        <div class="modal-title" style="color:var(--error);">⚠️ Delete Client</div>
+        <button class="modal-close-btn" onclick="closeModal('modal-delete-otp')">✕</button>
+      </div>
+      <div class="modal-body">
+        <p style="color:var(--text2); font-size:14px; line-height:1.7; margin-bottom:6px;">
+          This action is <strong style="color:var(--error);">permanent</strong> and cannot be undone.<br/>
+          An OTP has been sent to the client's registered email. Enter it below to confirm deletion.
+        </p>
+        <!-- Team: trigger OTP send on modal open via POST /api/clients/:id/send-delete-otp -->
+        <div class="otp-wrap">
+          <input class="otp-box" type="text" maxlength="1" inputmode="numeric"/>
+          <input class="otp-box" type="text" maxlength="1" inputmode="numeric"/>
+          <input class="otp-box" type="text" maxlength="1" inputmode="numeric"/>
+          <input class="otp-box" type="text" maxlength="1" inputmode="numeric"/>
+          <input class="otp-box" type="text" maxlength="1" inputmode="numeric"/>
+          <input class="otp-box" type="text" maxlength="1" inputmode="numeric"/>
+        </div>
+        <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:4px;">
+          <span style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted);">
+            Resend in <span id="delete-otp-timer">30s</span>
+          </span>
+          <button class="btn btn-outline btn-sm" id="deleteOtpResendBtn" disabled onclick="resendDeleteOtp()">↺ Resend</button>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <button class="btn btn-outline" onclick="closeModal('modal-delete-otp')">Cancel</button>
+        <!-- Team: DELETE /api/clients/:id with { otp: "XXXXXX" } -->
+        <button class="btn btn-danger" onclick="verifyDeleteOtp()">Confirm Delete</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================================================
+       JAVASCRIPT
+       All UI logic is here. Team: replace dummy data/alerts
+       with actual API calls using fetch() or axios.
+  ============================================================ -->
+  <script>
+
+    // ============================================================
+    // CLOCK — updates every second in the header
+    // ============================================================
+    function updateClock() {
+      document.getElementById('headerClock').textContent = new Date().toLocaleTimeString('en-IN');
+    }
+    updateClock();
+    setInterval(updateClock, 1000);
+
+    // ============================================================
+    // SIDEBAR TOGGLE — mobile hamburger menu
+    // ============================================================
+    function toggleSidebar() {
+      document.getElementById('sidebar').classList.toggle('open');
+      document.getElementById('sidebarOverlay').classList.toggle('show');
+    }
+
+    // ============================================================
+    // NAVIGATION — expand/collapse sidebar menu items
+    // ============================================================
+    function toggleNav(navId) {
+      const item = document.getElementById(navId);
+      const wasOpen = item.classList.contains('open');
+      // Close all nav items first
+      document.querySelectorAll('.nav-item').forEach(i => i.classList.remove('open'));
+      document.querySelectorAll('.nav-link').forEach(l => l.classList.remove('active'));
+      // Open clicked item if it was closed
+      if (!wasOpen) {
+        item.classList.add('open');
+        item.querySelector('.nav-link').classList.add('active');
+      }
+    }
+
+    // ============================================================
+    // PANEL SWITCHER — shows the correct content panel
+    // Team: add any data-fetch calls here when switching panels
+    // ============================================================
+    function showPanel(name) {
+      // Hide all panels
+      document.querySelectorAll('.panel').forEach(p => p.classList.remove('active'));
+      // Remove active from all sub-links
+      document.querySelectorAll('.sub-link').forEach(l => l.classList.remove('active'));
+      // Show selected panel
+      const panel = document.getElementById('panel-' + name);
+      if (panel) panel.classList.add('active');
+      // Highlight matching sub-link
+      document.querySelectorAll('.sub-link').forEach(l => {
+        if (l.getAttribute('onclick') && l.getAttribute('onclick').includes("'" + name + "'")) {
+          l.classList.add('active');
+        }
+      });
+      // Close sidebar on mobile after selection
+      if (window.innerWidth <= 900) toggleSidebar();
+    }
+
+    // ============================================================
+    // MODAL SYSTEM
+    // ============================================================
+    function openModal(id) { document.getElementById(id).classList.add('active'); }
+    function closeModal(id) { document.getElementById(id).classList.remove('active'); }
+
+    // Close modal on backdrop click
+    document.querySelectorAll('.modal-overlay').forEach(overlay => {
+      overlay.addEventListener('click', e => {
+        if (e.target === overlay) overlay.classList.remove('active');
+      });
+    });
+
+    // ============================================================
+    // CONTEXT MENU — Right-click on Market Watch rows
+    // ============================================================
+    let activeCtxRow = null;
+
+    function showCtxMenu(e, row) {
+      e.preventDefault();
+      activeCtxRow = row;
+      const menu = document.getElementById('ctxMenu');
+      menu.style.left = e.pageX + 'px';
+      menu.style.top  = e.pageY + 'px';
+      menu.classList.add('show');
+    }
+    document.addEventListener('click', () => {
+      document.getElementById('ctxMenu').classList.remove('show');
+    });
+
+    function ctxAdd()    { openModal('modal-add-script'); }
+    function ctxEdit()   {
+      if (!isRowChecked(activeCtxRow)) { alert('Please tick the checkbox on this row first.'); return; }
+      prefillEditScript(activeCtxRow);
+      openModal('modal-edit-script');
+    }
+    function ctxDelete() {
+      if (!isRowChecked(activeCtxRow)) { alert('Please tick the checkbox on this row first.'); return; }
+      confirmDeleteScript();
+    }
+
+    function isRowChecked(row) {
+      return row && row.querySelector('.mw-check') && row.querySelector('.mw-check').checked;
+    }
+
+    // ============================================================
+    // MARKET WATCH — Checkbox logic
+    // ============================================================
+    function mwCheckChange() {
+      const checks  = document.querySelectorAll('.mw-check');
+      const selected = [...checks].filter(c => c.checked);
+      const count    = selected.length;
+
+      document.getElementById('mwSelCount').textContent = count + ' selected';
+      document.getElementById('editScriptBtn').disabled   = count !== 1;
+      document.getElementById('deleteScriptBtn').disabled = count === 0;
+
+      // Highlight selected rows
+      checks.forEach(c => c.closest('tr').classList.toggle('selected', c.checked));
+
+      // Pre-fill edit modal when exactly 1 row selected
+      if (count === 1) prefillEditScript(selected[0].closest('tr'));
+    }
+
+    function mwToggleAll(masterCheckbox) {
+      document.querySelectorAll('.mw-check').forEach(c => c.checked = masterCheckbox.checked);
+      mwCheckChange();
+    }
+
+    function prefillEditScript(row) {
+      if (!row) return;
+      const cells = row.querySelectorAll('td');
+      document.getElementById('edit-script-name').value       = cells[1] ? cells[1].textContent.trim() : '';
+      document.getElementById('edit-script-instrument').value  = 'MCX:' + (cells[1] ? cells[1].textContent.trim() : '') + 'NOVFUT';
+    }
+
+    // ============================================================
+    // DELETE SCRIPT — with confirmation modal
+    // ============================================================
+    function confirmDeleteScript() {
+      const sel = document.querySelector('.mw-check:checked');
+      if (!sel) { alert('Please select a script first.'); return; }
+      const scriptName = sel.closest('tr').querySelectorAll('td')[1].textContent.trim();
+      document.getElementById('deleteScriptLabel').textContent = scriptName;
+      openModal('modal-delete-script');
+    }
+
+    function executeDeleteScript() {
+      // Team: call DELETE /api/market-watch/scripts/:id here
+      const sel = document.querySelector('.mw-check:checked');
+      if (sel) sel.closest('tr').remove();
+      closeModal('modal-delete-script');
+      mwCheckChange();
+    }
+
+    // ============================================================
+    // API STATUS TOGGLE LABELS
+    // ============================================================
+    function updateApiToggleLabel(checkbox) {
+      const label = checkbox.closest('.toggle-wrap') && checkbox.closest('.toggle-wrap').querySelector('.toggle-label');
+      if (label) label.textContent = checkbox.checked ? 'ON' : 'OFF';
+      // Handle config card active label
+      const activeLabel = checkbox.closest('.toggle-wrap') && checkbox.closest('.toggle-wrap').querySelector('.toggle-label');
+      if (activeLabel && activeLabel.textContent !== 'ON' && activeLabel.textContent !== 'OFF') {
+        activeLabel.textContent = checkbox.checked ? 'Active' : 'Inactive';
+      }
+    }
+
+    // ============================================================
+    // COIN DEALERS — Show/hide based on Coins toggle
+    // ============================================================
+    function toggleCoinDealers(formType, checkbox) {
+      const sectionId = formType === 'add' ? 'add-coin-dealers' : 'edit-coin-dealers';
+      document.getElementById(sectionId).style.display = checkbox.checked ? 'block' : 'none';
+    }
+
+    // ============================================================
+    // SOCIAL MEDIA — Show/hide URL input + highlight card
+    // ============================================================
+    function toggleSocialUrl(checkbox, cardId) {
+      const card     = document.getElementById(cardId);
+      const urlInput = card.querySelector('.social-url-input');
+      urlInput.style.display = checkbox.checked ? 'block' : 'none';
+      card.classList.toggle('enabled', checkbox.checked);
+    }
+
+    // ============================================================
+    // LIVE COLOR PREVIEW — Updates color swatch as hex is typed
+    // ============================================================
+    function liveColorPreview(inputId, previewId) {
+      const hex     = document.getElementById(inputId).value;
+      const preview = document.getElementById(previewId);
+      if (/^#[0-9A-Fa-f]{6}$/.test(hex)) preview.style.background = hex;
+    }
+
+    // ============================================================
+    // EDIT CLIENT — Load client data into form
+    // Team: replace dummy data with GET /api/clients/:id response
+    // ============================================================
+    const DUMMY_CLIENTS = {
+      '1': {
+        company: 'Bullion Hub Pvt. Ltd.', email: 'info@bullionhub.com', mobile: '+91 98765 43210',
+        bullion_gst: true, bullion_nogst: false, coins: false, header: true, mcx: true,
+        dealer1: 'KUNDAN', dealer2: 'MMTC PAMP', dealer3: 'ELITE',
+        bank: true, about: true, contact: true, booking: false,
+        web_company: 'Bullion Hub', em1: 'info@bullionhub.com', em2: '', mob1: '+91 98765 43210', mob2: '',
+        primary: '#0f8fff', secondary: '#aaee00',
+        yt: false, fb: true, ig: true, li: false, gg: false,
+        fb_url: 'https://facebook.com/bullionhub', ig_url: 'https://instagram.com/bullionhub'
+      },
+      '2': {
+        company: 'Gold Mart Traders', email: 'contact@goldmart.in', mobile: '+91 87654 32109',
+        bullion_gst: true, bullion_nogst: true, coins: true, header: true, mcx: true,
+        dealer1: 'KUNDAN', dealer2: 'MMTC PAMP', dealer3: 'ELITE',
+        bank: true, about: true, contact: false, booking: true,
+        web_company: 'Gold Mart', em1: 'contact@goldmart.in', em2: 'support@goldmart.in', mob1: '+91 87654 32109', mob2: '+91 76543 21098',
+        primary: '#ff8c00', secondary: '#ffd700',
+        yt: true, fb: true, ig: false, li: false, gg: true,
+        yt_url: 'https://youtube.com/@goldmart', fb_url: 'https://facebook.com/goldmart', gg_url: 'https://g.page/goldmart'
+      },
+      '3': {
+        company: 'Silver Palace Jewellers', email: 'hello@silverpalace.com', mobile: '+91 76543 21098',
+        bullion_gst: false, bullion_nogst: true, coins: false, header: false, mcx: true,
+        dealer1: 'KUNDAN', dealer2: 'MMTC PAMP', dealer3: 'ELITE',
+        bank: true, about: false, contact: true, booking: false,
+        web_company: 'Silver Palace', em1: 'hello@silverpalace.com', em2: '', mob1: '+91 76543 21098', mob2: '',
+        primary: '#aaaaaa', secondary: '#cccccc',
+        yt: false, fb: false, ig: true, li: true, gg: false,
+        ig_url: 'https://instagram.com/silverpalace', li_url: 'https://linkedin.com/company/silverpalace'
+      }
+    };
+
+    function loadClientData(clientId) {
+      const formWrap = document.getElementById('editClientFormWrap');
+      if (!clientId) { formWrap.style.display = 'none'; return; }
+
+      const d = DUMMY_CLIENTS[clientId];
+      if (!d) return;
+
+      formWrap.style.display = 'block';
+
+      // Basic Info
+      document.getElementById('e-company').value = d.company;
+      document.getElementById('e-email').value   = d.email;
+      document.getElementById('e-mobile').value  = d.mobile;
+
+      // Admin Features
+      document.getElementById('e-bullion-gst').checked  = d.bullion_gst;
+      document.getElementById('e-bullion-nogst').checked = d.bullion_nogst;
+      document.getElementById('e-coins').checked         = d.coins;
+      document.getElementById('e-header').checked        = d.header;
+      document.getElementById('e-mcx').checked           = d.mcx;
+      document.getElementById('edit-coin-dealers').style.display = d.coins ? 'block' : 'none';
+
+      // Coin Dealers
+      document.getElementById('e-dealer1').value = d.dealer1;
+      document.getElementById('e-dealer2').value = d.dealer2;
+      document.getElementById('e-dealer3').value = d.dealer3;
+
+      // Frontend Pages
+      document.getElementById('e-bank').checked    = d.bank;
+      document.getElementById('e-about').checked   = d.about;
+      document.getElementById('e-contact').checked = d.contact;
+      document.getElementById('e-booking').checked = d.booking;
+
+      // Website Contact Details
+      document.getElementById('e-web-company').value = d.web_company;
+      document.getElementById('e-em1').value  = d.em1;
+      document.getElementById('e-em2').value  = d.em2;
+      document.getElementById('e-mob1').value = d.mob1;
+      document.getElementById('e-mob2').value = d.mob2;
+
+      // Theme Colors
+      document.getElementById('edit-primary-hex').value   = d.primary;
+      document.getElementById('edit-primary-preview').style.background   = d.primary;
+      document.getElementById('edit-secondary-hex').value = d.secondary;
+      document.getElementById('edit-secondary-preview').style.background = d.secondary;
+
+      // Social Media
+      const socials = [
+        { toggle: 'e-yt-on', url: 'e-yt-url', card: 'social-edit-yt', on: d.yt, val: d.yt_url || '' },
+        { toggle: 'e-fb-on', url: 'e-fb-url', card: 'social-edit-fb', on: d.fb, val: d.fb_url || '' },
+        { toggle: 'e-ig-on', url: 'e-ig-url', card: 'social-edit-ig', on: d.ig, val: d.ig_url || '' },
+        { toggle: 'e-li-on', url: 'e-li-url', card: 'social-edit-li', on: d.li, val: d.li_url || '' },
+        { toggle: 'e-gg-on', url: 'e-gg-url', card: 'social-edit-gg', on: d.gg, val: d.gg_url || '' },
+      ];
+      socials.forEach(s => {
+        document.getElementById(s.toggle).checked = s.on;
+        const urlEl = document.getElementById(s.url);
+        urlEl.value = s.val;
+        urlEl.style.display = s.on ? 'block' : 'none';
+        document.getElementById(s.card).classList.toggle('enabled', s.on);
+      });
+    }
+
+    // ============================================================
+    // DELETE CLIENT OTP — timer + verify
+    // Team: connect to POST /api/clients/:id/send-delete-otp
+    // Team: connect to DELETE /api/clients/:id with OTP
+    // ============================================================
+    let deleteOtpTimerInterval;
+
+    document.getElementById('modal-delete-otp').addEventListener('click', function(e) {
+      if (e.target === this) return;
+    });
+
+    // Start resend timer when modal opens
+    document.getElementById('modal-delete-otp').addEventListener('transitionend', function() {
+      if (this.classList.contains('active')) startDeleteOtpTimer();
+    });
+
+    function startDeleteOtpTimer() {
+      let secs = 30;
+      const el  = document.getElementById('delete-otp-timer');
+      const btn = document.getElementById('deleteOtpResendBtn');
+      btn.disabled = true;
+      clearInterval(deleteOtpTimerInterval);
+      deleteOtpTimerInterval = setInterval(() => {
+        secs--;
+        el.textContent = secs + 's';
+        if (secs <= 0) { clearInterval(deleteOtpTimerInterval); btn.disabled = false; }
+      }, 1000);
+    }
+
+    function resendDeleteOtp() {
+      // Team: POST /api/clients/:id/send-delete-otp
+      document.querySelectorAll('#modal-delete-otp .otp-box').forEach(b => b.value = '');
+      document.querySelectorAll('#modal-delete-otp .otp-box')[0].focus();
+      startDeleteOtpTimer();
+    }
+
+    function verifyDeleteOtp() {
+      const otp = [...document.querySelectorAll('#modal-delete-otp .otp-box')].map(b => b.value).join('');
+      if (otp.length < 6) { alert('Please enter the full 6-digit OTP.'); return; }
+      // Team: DELETE /api/clients/:id with body { otp } — on success remove client from list
+      alert('✅ Client deleted successfully.');
+      closeModal('modal-delete-otp');
+      showPanel('welcome');
+      document.getElementById('editClientSelect').value = '';
+      document.getElementById('editClientFormWrap').style.display = 'none';
+    }
+
+    // OTP box auto-jump (shared logic for delete OTP)
+    document.querySelectorAll('#modal-delete-otp .otp-box').forEach((box, idx, boxes) => {
+      box.addEventListener('input', e => {
+        e.target.value = e.target.value.replace(/[^0-9]/g, '');
+        if (e.target.value && idx < boxes.length - 1) boxes[idx + 1].focus();
+      });
+      box.addEventListener('keydown', e => {
+        if (e.key === 'Backspace' && !e.target.value && idx > 0) boxes[idx - 1].focus();
+      });
+    });
+
+  </script>
+
+</body>
+</html>
