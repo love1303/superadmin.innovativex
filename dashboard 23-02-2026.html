@@ -1096,9 +1096,9 @@
            WELCOME PANEL — Default state
       ========================================================= -->
       <div class="panel active" id="panel-welcome">
-        <div style="display:flex; align-items:center; justify-content:center; height:calc(100vh - 160px); flex-direction:column; gap:20px;">
-          <img src="assets/logo.png" alt="Innovative X" style="height:140px; object-fit:contain;"/>
-          <div style="font-family:'JetBrains Mono',monospace; font-size:16px; color:var(--text2); letter-spacing:0.15em;">SELECT AN OPTION FROM THE CONTROL PANEL</div>
+        <div style="display:flex; align-items:center; justify-content:center; height:calc(100vh - 160px); flex-direction:column; gap:16px; opacity:0.35;">
+          <img src="assets/logo.png" alt="Innovative X" style="height:80px; object-fit:contain; filter:grayscale(0.5);"/>
+          <div style="font-family:'JetBrains Mono',monospace; font-size:13px; color:var(--muted); letter-spacing:0.12em;">SELECT AN OPTION FROM THE CONTROL PANEL</div>
         </div>
       </div>
 
@@ -1499,14 +1499,6 @@
                   <label class="form-label">Mobile Number *</label>
                   <input class="form-input" type="tel" name="mobile" placeholder="+91 XXXXX XXXXX" required/>
                 </div>
-                <div class="form-group">
-                  <label class="form-label">Domain *</label>
-                  <input class="form-input" type="text" name="domain" placeholder="e.g. bullionhub.in" required/>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Client ID *</label>
-                  <input class="form-input" type="text" name="client_id" placeholder="e.g. CLT001" required/>
-                </div>
               </div>
             </div>
           </div>
@@ -1792,14 +1784,6 @@
                     <label class="form-label">Mobile Number *</label>
                     <input class="form-input" type="tel" id="e-mobile" name="mobile" required/>
                   </div>
-                  <div class="form-group">
-                    <label class="form-label">Domain *</label>
-                    <input class="form-input" type="text" id="e-domain" name="domain" placeholder="e.g. bullionhub.in" required/>
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">Client ID *</label>
-                    <input class="form-input" type="text" id="e-client-id" name="client_id" placeholder="e.g. CLT001" required/>
-                  </div>
                 </div>
               </div>
             </div>
@@ -2017,6 +2001,7 @@
                   <option value="">— Choose a section —</option>
                   <option value="about-us">About Us</option>
                   <option value="contact-us">Contact Us</option>
+                  <option value="bank-details">Bank Details</option>
                   <option value="privacy-terms">Privacy Policy & Terms of Service</option>
                 </select>
               </div>
@@ -2381,7 +2366,7 @@
     // ============================================================
     const DUMMY_CLIENTS = {
       '1': {
-        company: 'Bullion Hub Pvt. Ltd.', email: 'info@bullionhub.com', mobile: '+91 98765 43210', domain: 'bullionhub.in', client_id: 'CLT001',
+        company: 'Bullion Hub Pvt. Ltd.', email: 'info@bullionhub.com', mobile: '+91 98765 43210',
         bullion_gst: true, bullion_nogst: false, coins: false, header: true, mcx: true,
         dealer1: 'KUNDAN', dealer2: 'MMTC PAMP', dealer3: 'ELITE',
         bank: true, about: true, contact: true, booking: false,
@@ -2391,7 +2376,7 @@
         fb_url: 'https://facebook.com/bullionhub', ig_url: 'https://instagram.com/bullionhub'
       },
       '2': {
-        company: 'Gold Mart Traders', email: 'contact@goldmart.in', mobile: '+91 87654 32109', domain: 'goldmart.in', client_id: 'CLT002',
+        company: 'Gold Mart Traders', email: 'contact@goldmart.in', mobile: '+91 87654 32109',
         bullion_gst: true, bullion_nogst: true, coins: true, header: true, mcx: true,
         dealer1: 'KUNDAN', dealer2: 'MMTC PAMP', dealer3: 'ELITE',
         bank: true, about: true, contact: false, booking: true,
@@ -2401,7 +2386,7 @@
         yt_url: 'https://youtube.com/@goldmart', fb_url: 'https://facebook.com/goldmart', gg_url: 'https://g.page/goldmart'
       },
       '3': {
-        company: 'Silver Palace Jewellers', email: 'hello@silverpalace.com', mobile: '+91 76543 21098', domain: 'silverpalace.in', client_id: 'CLT003',
+        company: 'Silver Palace Jewellers', email: 'hello@silverpalace.com', mobile: '+91 76543 21098',
         bullion_gst: false, bullion_nogst: true, coins: false, header: false, mcx: true,
         dealer1: 'KUNDAN', dealer2: 'MMTC PAMP', dealer3: 'ELITE',
         bank: true, about: false, contact: true, booking: false,
@@ -2422,11 +2407,9 @@
       formWrap.style.display = 'block';
 
       // Basic Info
-      document.getElementById('e-company').value   = d.company;
-      document.getElementById('e-email').value     = d.email;
-      document.getElementById('e-mobile').value    = d.mobile;
-      document.getElementById('e-domain').value    = d.domain;
-      document.getElementById('e-client-id').value = d.client_id;
+      document.getElementById('e-company').value = d.company;
+      document.getElementById('e-email').value   = d.email;
+      document.getElementById('e-mobile').value  = d.mobile;
 
       // Admin Features
       document.getElementById('e-bullion-gst').checked  = d.bullion_gst;
@@ -2571,6 +2554,7 @@
       const builders = {
         'about-us':      buildAboutUsForm,
         'contact-us':    buildContactUsForm,
+        'bank-details':  buildBankDetailsForm,
         'privacy-terms': buildPrivacyTermsForm,
       };
       if (builders[section]) area.innerHTML = builders[section]();
@@ -2737,7 +2721,7 @@
                   </div>
                   <div class="form-group">
                     <label class="form-label">Certificate Details</label>
-                    <textarea class="form-input" name="cert1_details" rows="3" placeholder="e.g. XXX00XX000" style="resize:vertical;"></textarea>
+                    <textarea class="form-input" name="cert1_details" rows="3" placeholder="e.g. Certificate No HM/C-9790174309" style="resize:vertical;"></textarea>
                   </div>
                 </div>
               </div>
@@ -2761,7 +2745,7 @@
                   </div>
                   <div class="form-group">
                     <label class="form-label">Certificate Details</label>
-                    <textarea class="form-input" name="cert2_details" rows="3" placeholder="e.g. Trade Mark Number: XXX00XX000" style="resize:vertical;"></textarea>
+                    <textarea class="form-input" name="cert2_details" rows="3" placeholder="e.g. Trade Mark Number: 5916969" style="resize:vertical;"></textarea>
                   </div>
                 </div>
               </div>
@@ -2785,7 +2769,7 @@
                   </div>
                   <div class="form-group">
                     <label class="form-label">Certificate Details</label>
-                    <textarea class="form-input" name="cert3_details" rows="3" placeholder="e.g. IBJA Membership: XXX00XX000" style="resize:vertical;"></textarea>
+                    <textarea class="form-input" name="cert3_details" rows="3" placeholder="e.g. IBJA Membership → PJ-05344" style="resize:vertical;"></textarea>
                   </div>
                 </div>
               </div>
@@ -2950,6 +2934,134 @@
           <button class="btn btn-outline" onclick="fsReset()">Cancel</button>
           <!-- Team: PUT /api/frontend/:clientId/contact-us -->
           <button class="btn btn-success">✓ Save Contact Us</button>
+        </div>
+
+      </div>`;
+    }
+
+    // ============================================================
+    // FORM BUILDER — BANK DETAILS
+    // Team: pre-fill from GET /api/frontend/:clientId/bank-details
+    // ============================================================
+    function buildBankDetailsForm() {
+      return `
+      <div class="scrollable-content">
+
+        <!-- Bank 1 -->
+        <div class="bank-slot" id="bank-slot-1">
+          <div class="bank-slot-header">
+            <div class="bank-slot-title">🏦 Bank 1</div>
+            <div class="toggle-wrap">
+              <label class="toggle"><input type="checkbox" checked onchange="toggleBankSlot(this, 'bank-slot-1')"/><span class="toggle-slider"></span></label>
+              <span class="toggle-label">ON</span>
+            </div>
+          </div>
+          <div class="bank-slot-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Bank Name *</label>
+                <input class="form-input" type="text" name="bank1_name" placeholder="e.g. Bank Name"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Bank Logo Image</label>
+                <div class="img-upload-area">
+                  <input type="file" accept="image/*" name="bank1_logo"/>
+                  <div class="img-upload-icon">🏦</div>
+                  <div class="img-upload-label">CLICK TO UPLOAD · bank1.png</div>
+                  <div class="img-upload-name"></div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Account Name *</label>
+                <input class="form-input" type="text" name="bank1_account_name" placeholder="e.g. INNOVATIVE X"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Account Type *</label>
+                <select class="form-select" name="bank1_account_type">
+                  <option value="CURRENT">CURRENT</option>
+                  <option value="SAVINGS">SAVINGS</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Account Number *</label>
+                <input class="form-input" type="text" name="bank1_account_number" placeholder="e.g. 000000000000000"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">IFSC Code *</label>
+                <input class="form-input" type="text" name="bank1_ifsc" placeholder="e.g. XXXXXX0000000"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Branch Name *</label>
+              <input class="form-input" type="text" name="bank1_branch" placeholder="e.g. BRANCH NAME"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Bank 2 -->
+        <div class="bank-slot disabled" id="bank-slot-2">
+          <div class="bank-slot-header">
+            <div class="bank-slot-title">🏦 Bank 2</div>
+            <div class="toggle-wrap">
+              <label class="toggle"><input type="checkbox" onchange="toggleBankSlot(this, 'bank-slot-2')"/><span class="toggle-slider"></span></label>
+              <span class="toggle-label">OFF</span>
+            </div>
+          </div>
+          <div class="bank-slot-body">
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Bank Name *</label>
+                <input class="form-input" type="text" name="bank2_name" placeholder="e.g. SBI"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Bank Logo Image</label>
+                <div class="img-upload-area">
+                  <input type="file" accept="image/*" name="bank2_logo"/>
+                  <div class="img-upload-icon">🏦</div>
+                  <div class="img-upload-label">CLICK TO UPLOAD · bank2.png</div>
+                  <div class="img-upload-name"></div>
+                </div>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Account Name *</label>
+                <input class="form-input" type="text" name="bank2_account_name" placeholder="e.g. INNOVATIVE X"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">Account Type *</label>
+                <select class="form-select" name="bank2_account_type">
+                  <option value="CURRENT">CURRENT</option>
+                  <option value="SAVINGS">SAVINGS</option>
+                </select>
+              </div>
+            </div>
+            <div class="form-row">
+              <div class="form-group">
+                <label class="form-label">Account Number *</label>
+                <input class="form-input" type="text" name="bank2_account_number" placeholder="e.g. 000000000000000"/>
+              </div>
+              <div class="form-group">
+                <label class="form-label">IFSC Code *</label>
+                <input class="form-input" type="text" name="bank2_ifsc" placeholder="e.g. SBIN0001234"/>
+              </div>
+            </div>
+            <div class="form-group">
+              <label class="form-label">Branch Name *</label>
+              <input class="form-input" type="text" name="bank2_branch" placeholder="e.g. CIVIL LINES"/>
+            </div>
+          </div>
+        </div>
+
+        <!-- Form Buttons -->
+        <div class="form-actions">
+          <button class="btn btn-outline" onclick="fsReset()">Cancel</button>
+          <!-- Team: PUT /api/frontend/:clientId/bank-details -->
+          <button class="btn btn-success">✓ Save Bank Details</button>
         </div>
 
       </div>`;

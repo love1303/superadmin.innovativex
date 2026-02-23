@@ -89,25 +89,22 @@
       box-shadow: 0 2px 20px rgba(0,0,0,0.5);
     }
 
-    /* Left side of header — Logo + Brand Name */
+    /* Left side of header — Brand Name */
     .header-left {
       display: flex;
       align-items: center;
+      justify-content: center;
       height: 100%;
       width: var(--sidebar-w);
       border-right: 1px solid var(--border2);
       padding: 0 20px;
-      gap: 12px;
       flex-shrink: 0;
-    }
-    .header-logo {
-      height: 36px;
-      object-fit: contain;
+      position: relative;
     }
     .header-brand-name {
-      font-size: 15px;
+      font-size: 16px;
       font-weight: 700;
-      letter-spacing: 0.04em;
+      letter-spacing: 0.06em;
       background: linear-gradient(90deg, var(--blue), var(--green));
       -webkit-background-clip: text;
       -webkit-text-fill-color: transparent;
@@ -115,14 +112,15 @@
       white-space: nowrap;
     }
 
-    /* Right side of header — Super Admin label + clock + logout */
+    /* Right side of header — Super Admin centered + logout pinned right */
     .header-right {
       display: flex;
       align-items: center;
-      gap: 16px;
-      padding: 0 20px;
+      justify-content: center;
+      gap: 14px;
+      padding: 0 16px;
       flex: 1;
-      justify-content: flex-end;
+      position: relative;
     }
     .header-admin-label {
       font-size: 15px;
@@ -132,9 +130,7 @@
       text-transform: uppercase;
       white-space: nowrap;
     }
-    .header-admin-label span {
-      color: var(--blue);
-    }
+    .header-admin-label span { color: var(--blue); }
     .header-clock {
       font-family: 'JetBrains Mono', monospace;
       font-size: 12px;
@@ -162,10 +158,12 @@
       text-decoration: none;
       transition: all 0.2s;
       white-space: nowrap;
+      position: absolute;
+      right: 16px;
     }
     .btn-logout:hover { background: rgba(255,68,85,0.2); border-color: var(--error); }
 
-    /* Hamburger — mobile only */
+    /* Hamburger — mobile only, pinned left */
     .hamburger {
       display: none;
       flex-direction: column;
@@ -175,6 +173,8 @@
       cursor: pointer;
       padding: 4px;
       flex-shrink: 0;
+      position: absolute;
+      left: 16px;
     }
     .hamburger span {
       display: block;
@@ -296,6 +296,7 @@
       flex: 1;
       padding: 28px;
       min-height: calc(100vh - var(--header-h));
+      width: calc(100% - var(--sidebar-w));
     }
 
     /* Page header bar */
@@ -761,6 +762,8 @@
     .social-icon.ig { background: rgba(225,48,108,0.12); color: #e1306c; border: 1px solid rgba(225,48,108,0.2); }
     .social-icon.li { background: rgba(10,102,194,0.12); color: #0a66c2; border: 1px solid rgba(10,102,194,0.2); }
     .social-icon.gg { background: rgba(66,133,244,0.12); color: #4285f4; border: 1px solid rgba(66,133,244,0.2); }
+    .social-icon.wa { background: rgba(37,211,102,0.12); color: #25d366; border: 1px solid rgba(37,211,102,0.2); }
+    .social-icon.ath { background: rgba(15,143,255,0.12); color: var(--blue); border: 1px solid rgba(15,143,255,0.2); }
     .social-name { flex: 1; font-size: 14px; font-weight: 600; color: var(--text2); }
     .social-url-input { display: none; margin-top: 10px; }
 
@@ -850,14 +853,20 @@
       .sidebar { transform: translateX(-260px); width: 260px; }
       .sidebar.open { transform: translateX(0); }
       .sidebar-overlay.show { display: block; }
-      .content { margin-left: 0; }
-      .header-left { width: auto; border-right: none; }
-      .hamburger { display: flex; }
+      .content { margin-left: 0; width: 100%; }
+      .header-left { width: 60px; border-right: 1px solid var(--border2); justify-content: center; padding: 0; }
+      .header-brand-name { display: none; }
+      .hamburger { display: flex; position: static; }
+      .header-clock { display: none; }
+      .btn-logout { position: static; }
+      .header-right { justify-content: flex-end; padding: 0 12px; gap: 10px; }
+      .header-admin-label { font-size: 13px; letter-spacing: 0.04em; }
     }
     @media(max-width: 600px) {
       .content { padding: 16px; }
       .config-grid { grid-template-columns: 1fr; }
       .page-header { flex-direction: column; align-items: flex-start; }
+      .header-admin-label { display: none; }
     }
   </style>
 </head>
@@ -1547,6 +1556,25 @@
                   <input class="form-input social-url-input" type="url" name="social_google_url" placeholder="https://g.page/business"/>
                 </div>
 
+                <!-- WhatsApp Chat Button -->
+                <div class="social-item" id="social-add-wa">
+                  <div class="social-row">
+                    <span class="social-icon wa"><i class="fab fa-whatsapp"></i></span>
+                    <span class="social-name">WhatsApp Chat</span>
+                    <label class="toggle"><input type="checkbox" name="social_whatsapp_enabled" onchange="toggleSocialUrl(this, 'social-add-wa')"/><span class="toggle-slider"></span></label>
+                  </div>
+                  <input class="form-input social-url-input" type="url" name="social_whatsapp_url" placeholder="https://wa.me/919XXXXXXXXX"/>
+                </div>
+
+                <!-- Add to Home Screen -->
+                <div class="social-item" id="social-add-ath">
+                  <div class="social-row">
+                    <span class="social-icon ath"><i class="fas fa-plus-square"></i></span>
+                    <span class="social-name">Add to Home Screen</span>
+                    <label class="toggle"><input type="checkbox" name="add_to_home_screen"/><span class="toggle-slider"></span></label>
+                  </div>
+                </div>
+
               </div>
             </div>
           </div>
@@ -1755,6 +1783,26 @@
                     </div>
                     <input class="form-input social-url-input" type="url" id="e-gg-url" name="social_google_url" placeholder="https://g.page/business"/>
                   </div>
+
+                  <!-- WhatsApp Chat Button -->
+                  <div class="social-item" id="social-edit-wa">
+                    <div class="social-row">
+                      <span class="social-icon wa"><i class="fab fa-whatsapp"></i></span>
+                      <span class="social-name">WhatsApp Chat</span>
+                      <label class="toggle"><input type="checkbox" id="e-wa-on" name="social_whatsapp_enabled" onchange="toggleSocialUrl(this, 'social-edit-wa')"/><span class="toggle-slider"></span></label>
+                    </div>
+                    <input class="form-input social-url-input" type="url" id="e-wa-url" name="social_whatsapp_url" placeholder="https://wa.me/919XXXXXXXXX"/>
+                  </div>
+
+                  <!-- Add to Home Screen -->
+                  <div class="social-item" id="social-edit-ath">
+                    <div class="social-row">
+                      <span class="social-icon ath"><i class="fas fa-plus-square"></i></span>
+                      <span class="social-name">Add to Home Screen</span>
+                      <label class="toggle"><input type="checkbox" id="e-ath-on" name="add_to_home_screen"/><span class="toggle-slider"></span></label>
+                    </div>
+                  </div>
+
                 </div>
               </div>
             </div>
