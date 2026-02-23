@@ -246,7 +246,8 @@
       document.getElementById('e-company').value   = d.company;
       document.getElementById('e-email').value     = d.email;
       document.getElementById('e-mobile').value    = d.mobile;
-      document.getElementById('e-domain').value = d.domain;
+      document.getElementById('e-domain').value    = d.domain;
+      document.getElementById('e-client-id').value = d.client_id;
 
       // Admin Features
       document.getElementById('e-bullion-gst').checked  = d.bullion_gst;
@@ -274,19 +275,11 @@
       document.getElementById('e-mob1').value = d.mob1;
       document.getElementById('e-mob2').value = d.mob2;
 
-      // Theme Colors — 5 fields
-      // Team: map these to actual color fields from API response
-      const colors = [
-        { hex: 'edit-header-color-hex',   preview: 'edit-header-color-preview',   val: d.color_header   || '#0f8fff' },
-        { hex: 'edit-footer-color-hex',   preview: 'edit-footer-color-preview',   val: d.color_footer   || '#080f16' },
-        { hex: 'edit-bg-color-hex',       preview: 'edit-bg-color-preview',       val: d.color_bg       || '#ffffff' },
-        { hex: 'edit-heading-color-hex',  preview: 'edit-heading-color-preview',  val: d.color_heading  || '#aaee00' },
-        { hex: 'edit-btn-color-hex',      preview: 'edit-btn-color-preview',      val: d.color_btn      || '#1a6bff' },
-      ];
-      colors.forEach(c => {
-        document.getElementById(c.hex).value = c.val;
-        document.getElementById(c.preview).style.background = c.val;
-      });
+      // Theme Colors
+      document.getElementById('edit-primary-hex').value   = d.primary;
+      document.getElementById('edit-primary-preview').style.background   = d.primary;
+      document.getElementById('edit-secondary-hex').value = d.secondary;
+      document.getElementById('edit-secondary-preview').style.background = d.secondary;
 
       // Social Media
       const socials = [
@@ -850,89 +843,3 @@
       document.getElementById('fs-section-select').disabled = true;
       document.getElementById('fs-form-area').innerHTML  = '';
     }
-
-    // ============================================================
-    // INACTIVE CLIENTS — Reactivate client
-    // Team: POST /api/clients/:id/reactivate on click
-    // ============================================================
-    function reactivateClient(btn) {
-      const row         = btn.closest('tr');
-      const clientName  = row.querySelectorAll('td')[0].textContent.trim();
-      if (!confirm('Reactivate client: ' + clientName + '?\nTheir website will come back online immediately.')) return;
-      // Team: POST /api/clients/:id/reactivate — on success remove row from inactive table
-      row.remove();
-    }
-
-    // ============================================================
-    // META SETTINGS — Load client meta data
-    // Team: replace dummy data with GET /api/meta/:clientId
-    // ============================================================
-    const DUMMY_META = {
-      '1': {
-        home_title:    'Bullion Hub — Live Gold & Silver Rates',
-        home_desc:     'Get real-time gold and silver rates from Bullion Hub. Trusted bullion dealer in Ludhiana.',
-        about_title:   'About Us — Bullion Hub',
-        about_desc:    'Learn about Bullion Hub, our story, commitment to quality and certified precious metals.',
-        contact_title: 'Contact Us — Bullion Hub',
-        contact_desc:  'Get in touch with Bullion Hub for any inquiries about gold, silver and investment options.',
-        bank_title:    'Bank Details — Bullion Hub',
-        bank_desc:     'Verified bank details for secure transactions with Bullion Hub.',
-        booking_title: 'Booking Desk — Bullion Hub',
-        booking_desc:  'Book your order with Bullion Hub easily through our booking desk.',
-      },
-      '2': {
-        home_title:    'Gold Mart — Live Bullion Rates',
-        home_desc:     'Gold Mart provides live gold and silver rates with trusted and verified quality.',
-        about_title:   'About Us — Gold Mart',
-        about_desc:    'Discover the story behind Gold Mart and our commitment to premium bullion products.',
-        contact_title: 'Contact Us — Gold Mart',
-        contact_desc:  'Reach out to Gold Mart for all your precious metals and investment queries.',
-        bank_title:    'Bank Details — Gold Mart',
-        bank_desc:     'Secure and verified bank details for Gold Mart transactions.',
-        booking_title: 'Booking Desk — Gold Mart',
-        booking_desc:  'Place your bullion order easily through Gold Mart booking desk.',
-      },
-      '3': {
-        home_title:    'Silver Palace — Live Silver & Gold Rates',
-        home_desc:     'Silver Palace offers premium silver and gold bullion with live market rates.',
-        about_title:   'About Us — Silver Palace',
-        about_desc:    'Know more about Silver Palace Jewellers and our certified precious metals.',
-        contact_title: 'Contact Us — Silver Palace',
-        contact_desc:  'Contact Silver Palace for all enquiries related to silver and gold products.',
-        bank_title:    'Bank Details — Silver Palace',
-        bank_desc:     'Verified bank account details for Silver Palace payments.',
-        booking_title: 'Booking Desk — Silver Palace',
-        booking_desc:  'Book your silver and gold orders with Silver Palace easily.',
-      }
-    };
-
-    function loadMetaSettings(clientId) {
-      const wrap = document.getElementById('meta-form-wrap');
-      if (!clientId) { wrap.style.display = 'none'; return; }
-      wrap.style.display = 'block';
-
-      const d = DUMMY_META[clientId];
-      if (!d) return;
-
-      // Team: replace below with actual API response fields
-      document.querySelector('[name="home_meta_title"]').value    = d.home_title;
-      document.querySelector('[name="home_meta_desc"]').value     = d.home_desc;
-      document.querySelector('[name="about_meta_title"]').value   = d.about_title;
-      document.querySelector('[name="about_meta_desc"]').value    = d.about_desc;
-      document.querySelector('[name="contact_meta_title"]').value = d.contact_title;
-      document.querySelector('[name="contact_meta_desc"]').value  = d.contact_desc;
-      document.querySelector('[name="bank_meta_title"]').value    = d.bank_title;
-      document.querySelector('[name="bank_meta_desc"]').value     = d.bank_desc;
-      document.querySelector('[name="booking_meta_title"]').value = d.booking_title;
-      document.querySelector('[name="booking_meta_desc"]').value  = d.booking_desc;
-    }
-
-    function resetMetaSettings() {
-      document.getElementById('meta-client-select').value = '';
-      document.getElementById('meta-form-wrap').style.display = 'none';
-    }
-
-    // ============================================================
-    // EDIT CLIENT — Update loadClientData for new theme color fields
-    // (removed client_id, added 5 color fields)
-    // ============================================================

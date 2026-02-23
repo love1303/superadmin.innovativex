@@ -98,7 +98,6 @@
           <div class="sub-nav">
             <div class="sub-link" onclick="showPanel('add-client')">Add Client</div>
             <div class="sub-link" onclick="showPanel('edit-client')">Edit Client</div>
-            <div class="sub-link" onclick="showPanel('inactive-clients')">Inactive Clients</div>
           </div>
         </div>
 
@@ -107,14 +106,6 @@
           <div class="nav-link" onclick="showPanel('frontend-settings'); setNavActive('nav-frontend')">
             <span class="nav-icon">🖥️</span>
             <span class="nav-label">Frontend Settings</span>
-          </div>
-        </div>
-
-        <!-- Meta Settings — Single click, no sub-menu -->
-        <div class="nav-item" id="nav-meta">
-          <div class="nav-link" onclick="showPanel('meta-settings'); setNavActive('nav-meta')">
-            <span class="nav-icon">🔍</span>
-            <span class="nav-label">Meta Settings</span>
           </div>
         </div>
 
@@ -537,7 +528,10 @@
                   <label class="form-label">Domain *</label>
                   <input class="form-input" type="text" name="domain" placeholder="e.g. bullionhub.in" required/>
                 </div>
-
+                <div class="form-group">
+                  <label class="form-label">Client ID *</label>
+                  <input class="form-input" type="text" name="client_id" placeholder="e.g. CLT001" required/>
+                </div>
               </div>
             </div>
           </div>
@@ -632,8 +626,8 @@
             <div class="form-section-body">
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">Company Name on Frontend *</label>
-                  <input class="form-input" type="text" name="website_company_name" placeholder="Name shown on client's frontend" required/>
+                  <label class="form-label">Company Name on Website *</label>
+                  <input class="form-input" type="text" name="website_company_name" placeholder="Name shown on client's website" required/>
                 </div>
                 <div class="form-group">
                   <label class="form-label">Email 1 *</label>
@@ -663,38 +657,17 @@
             <div class="form-section-body">
               <div class="form-row">
                 <div class="form-group">
-                  <label class="form-label">Header Color *</label>
+                  <label class="form-label">Primary Color *</label>
                   <div class="color-input-wrap">
-                    <div class="color-preview" id="add-header-color-preview" style="background:#0f8fff;"></div>
-                    <input class="form-input" type="text" id="add-header-color-hex" name="color_header" value="#0f8fff" maxlength="7" placeholder="#000000" oninput="liveColorPreview('add-header-color-hex','add-header-color-preview')"/>
+                    <div class="color-preview" id="add-primary-preview" style="background:#0f8fff;"></div>
+                    <input class="form-input" type="text" id="add-primary-hex" name="color_primary" value="#0f8fff" maxlength="7" placeholder="#000000" oninput="liveColorPreview('add-primary-hex','add-primary-preview')"/>
                   </div>
                 </div>
                 <div class="form-group">
-                  <label class="form-label">Footer Color *</label>
+                  <label class="form-label">Secondary Color *</label>
                   <div class="color-input-wrap">
-                    <div class="color-preview" id="add-footer-color-preview" style="background:#080f16;"></div>
-                    <input class="form-input" type="text" id="add-footer-color-hex" name="color_footer" value="#080f16" maxlength="7" placeholder="#000000" oninput="liveColorPreview('add-footer-color-hex','add-footer-color-preview')"/>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Background Color *</label>
-                  <div class="color-input-wrap">
-                    <div class="color-preview" id="add-bg-color-preview" style="background:#ffffff;"></div>
-                    <input class="form-input" type="text" id="add-bg-color-hex" name="color_background" value="#ffffff" maxlength="7" placeholder="#000000" oninput="liveColorPreview('add-bg-color-hex','add-bg-color-preview')"/>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Section Heading Color *</label>
-                  <div class="color-input-wrap">
-                    <div class="color-preview" id="add-heading-color-preview" style="background:#aaee00;"></div>
-                    <input class="form-input" type="text" id="add-heading-color-hex" name="color_section_heading" value="#aaee00" maxlength="7" placeholder="#000000" oninput="liveColorPreview('add-heading-color-hex','add-heading-color-preview')"/>
-                  </div>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Header Button Color *</label>
-                  <div class="color-input-wrap">
-                    <div class="color-preview" id="add-btn-color-preview" style="background:#1a6bff;"></div>
-                    <input class="form-input" type="text" id="add-btn-color-hex" name="color_header_button" value="#1a6bff" maxlength="7" placeholder="#000000" oninput="liveColorPreview('add-btn-color-hex','add-btn-color-preview')"/>
+                    <div class="color-preview" id="add-secondary-preview" style="background:#aaee00;"></div>
+                    <input class="form-input" type="text" id="add-secondary-hex" name="color_secondary" value="#aaee00" maxlength="7" placeholder="#000000" oninput="liveColorPreview('add-secondary-hex','add-secondary-preview')"/>
                   </div>
                 </div>
               </div>
@@ -848,7 +821,10 @@
                     <label class="form-label">Domain *</label>
                     <input class="form-input" type="text" id="e-domain" name="domain" placeholder="e.g. bullionhub.in" required/>
                   </div>
-
+                  <div class="form-group">
+                    <label class="form-label">Client ID *</label>
+                    <input class="form-input" type="text" id="e-client-id" name="client_id" placeholder="e.g. CLT001" required/>
+                  </div>
                 </div>
               </div>
             </div>
@@ -900,7 +876,7 @@
               <div class="form-section-body">
                 <div class="form-row">
                   <div class="form-group">
-                    <label class="form-label">Company Name on Frontend *</label>
+                    <label class="form-label">Company Name on Website *</label>
                     <input class="form-input" type="text" id="e-web-company" name="website_company_name" required/>
                   </div>
                   <div class="form-group">
@@ -929,38 +905,17 @@
               <div class="form-section-body">
                 <div class="form-row">
                   <div class="form-group">
-                    <label class="form-label">Header Color *</label>
+                    <label class="form-label">Primary Color *</label>
                     <div class="color-input-wrap">
-                      <div class="color-preview" id="edit-header-color-preview"></div>
-                      <input class="form-input" type="text" id="edit-header-color-hex" name="color_header" maxlength="7" oninput="liveColorPreview('edit-header-color-hex','edit-header-color-preview')"/>
+                      <div class="color-preview" id="edit-primary-preview"></div>
+                      <input class="form-input" type="text" id="edit-primary-hex" name="color_primary" maxlength="7" oninput="liveColorPreview('edit-primary-hex','edit-primary-preview')"/>
                     </div>
                   </div>
                   <div class="form-group">
-                    <label class="form-label">Footer Color *</label>
+                    <label class="form-label">Secondary Color *</label>
                     <div class="color-input-wrap">
-                      <div class="color-preview" id="edit-footer-color-preview"></div>
-                      <input class="form-input" type="text" id="edit-footer-color-hex" name="color_footer" maxlength="7" oninput="liveColorPreview('edit-footer-color-hex','edit-footer-color-preview')"/>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">Background Color *</label>
-                    <div class="color-input-wrap">
-                      <div class="color-preview" id="edit-bg-color-preview"></div>
-                      <input class="form-input" type="text" id="edit-bg-color-hex" name="color_background" maxlength="7" oninput="liveColorPreview('edit-bg-color-hex','edit-bg-color-preview')"/>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">Section Heading Color *</label>
-                    <div class="color-input-wrap">
-                      <div class="color-preview" id="edit-heading-color-preview"></div>
-                      <input class="form-input" type="text" id="edit-heading-color-hex" name="color_section_heading" maxlength="7" oninput="liveColorPreview('edit-heading-color-hex','edit-heading-color-preview')"/>
-                    </div>
-                  </div>
-                  <div class="form-group">
-                    <label class="form-label">Header Button Color *</label>
-                    <div class="color-input-wrap">
-                      <div class="color-preview" id="edit-btn-color-preview"></div>
-                      <input class="form-input" type="text" id="edit-btn-color-hex" name="color_header_button" maxlength="7" oninput="liveColorPreview('edit-btn-color-hex','edit-btn-color-preview')"/>
+                      <div class="color-preview" id="edit-secondary-preview"></div>
+                      <input class="form-input" type="text" id="edit-secondary-hex" name="color_secondary" maxlength="7" oninput="liveColorPreview('edit-secondary-hex','edit-secondary-preview')"/>
                     </div>
                   </div>
                 </div>
@@ -1043,192 +998,6 @@
               <button class="btn btn-outline" onclick="showPanel('welcome')">Cancel</button>
               <!-- Team: PUT /api/clients/:id with form data -->
               <button class="btn btn-success">✓ Submit Changes</button>
-            </div>
-
-          </div>
-        </div>
-      </div>
-
-      <!-- =========================================================
-           INACTIVE CLIENTS PANEL
-           Team: GET /api/clients?status=inactive to populate table
-           Team: POST /api/clients/:id/reactivate on Reactivate click
-      ========================================================= -->
-      <div class="panel" id="panel-inactive-clients">
-        <div class="page-header">
-          <div>
-            <div class="page-title">Inactive Clients</div>
-            <div class="page-breadcrumb">Clients / <span>Inactive Clients</span></div>
-          </div>
-        </div>
-        <div class="card">
-          <div class="card-header">
-            <div class="card-title"><span class="card-title-dot"></span> Deactivated Clients</div>
-            <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted);">Data is preserved — website is offline</div>
-          </div>
-          <div class="table-wrap">
-            <!-- Team: populate from GET /api/clients?status=inactive -->
-            <table>
-              <thead>
-                <tr>
-                  <th>Company Name</th>
-                  <th>Domain</th>
-                  <th>Email</th>
-                  <th>Mobile</th>
-                  <th>Deactivated On</th>
-                  <th>Reactivate</th>
-                </tr>
-              </thead>
-              <tbody>
-                <!-- Sample row — Team: replace with dynamic data -->
-                <tr>
-                  <td style="font-weight:600;">Gold Mart Traders</td>
-                  <td class="td-mono">goldmart.in</td>
-                  <td class="td-mono">contact@goldmart.in</td>
-                  <td class="td-mono">+91 87654 32109</td>
-                  <td class="td-mono" style="color:var(--muted);">15 Jan 2025</td>
-                  <td>
-                    <!-- Team: POST /api/clients/:id/reactivate -->
-                    <button class="btn btn-success btn-sm" onclick="reactivateClient(this)">⚡ Reactivate</button>
-                  </td>
-                </tr>
-                <tr>
-                  <td style="font-weight:600;">Silver Palace Jewellers</td>
-                  <td class="td-mono">silverpalace.in</td>
-                  <td class="td-mono">hello@silverpalace.in</td>
-                  <td class="td-mono">+91 76543 21098</td>
-                  <td class="td-mono" style="color:var(--muted);">02 Feb 2025</td>
-                  <td>
-                    <button class="btn btn-success btn-sm" onclick="reactivateClient(this)">⚡ Reactivate</button>
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-        <p style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--muted); margin-top:10px; letter-spacing:0.05em;">
-          💡 Client data is fully preserved in the database — reactivating will bring their website back online instantly
-        </p>
-      </div>
-
-      <!-- =========================================================
-           META SETTINGS PANEL
-           Team: GET /api/meta/:clientId to load all page meta data
-           Team: PUT /api/meta/:clientId to save all page meta data
-      ========================================================= -->
-      <div class="panel" id="panel-meta-settings">
-        <div class="page-header">
-          <div>
-            <div class="page-title">Meta Settings</div>
-            <div class="page-breadcrumb">🔍 <span>Meta Settings</span></div>
-          </div>
-        </div>
-
-        <!-- Select Client -->
-        <div class="card" style="margin-bottom:20px;">
-          <div class="card-header">
-            <div class="card-title"><span class="card-title-dot"></span> Select Client</div>
-          </div>
-          <div style="padding:16px 20px;">
-            <!-- Team: populate from GET /api/clients -->
-            <select class="form-select" id="meta-client-select" onchange="loadMetaSettings(this.value)" style="max-width:420px;">
-              <option value="">— Choose a client —</option>
-              <option value="1">Client A — Bullion Hub</option>
-              <option value="2">Client B — Gold Mart</option>
-              <option value="3">Client C — Silver Palace</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- Meta Forms — hidden until client selected -->
-        <div id="meta-form-wrap" style="display:none;">
-          <div class="scrollable-content">
-
-            <!-- HOME -->
-            <div class="form-section">
-              <div class="form-section-header"><div class="form-section-title">🏠 Home</div></div>
-              <div class="form-section-body">
-                <div class="form-group">
-                  <label class="form-label">Meta Title *</label>
-                  <input class="form-input" type="text" name="home_meta_title" placeholder="e.g. Bullion Hub — Live Gold & Silver Rates"/>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Meta Description *</label>
-                  <textarea class="form-input" name="home_meta_desc" rows="3" placeholder="Brief description of the homepage for search engines..." style="resize:vertical;"></textarea>
-                  <div style="font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); margin-top:5px;">💡 Recommended: 150–160 characters</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- ABOUT US -->
-            <div class="form-section">
-              <div class="form-section-header"><div class="form-section-title">ℹ️ About Us</div></div>
-              <div class="form-section-body">
-                <div class="form-group">
-                  <label class="form-label">Meta Title *</label>
-                  <input class="form-input" type="text" name="about_meta_title" placeholder="e.g. About Us — Bullion Hub"/>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Meta Description *</label>
-                  <textarea class="form-input" name="about_meta_desc" rows="3" placeholder="Brief description of the About Us page..." style="resize:vertical;"></textarea>
-                  <div style="font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); margin-top:5px;">💡 Recommended: 150–160 characters</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- CONTACT US -->
-            <div class="form-section">
-              <div class="form-section-header"><div class="form-section-title">📞 Contact Us</div></div>
-              <div class="form-section-body">
-                <div class="form-group">
-                  <label class="form-label">Meta Title *</label>
-                  <input class="form-input" type="text" name="contact_meta_title" placeholder="e.g. Contact Us — Bullion Hub"/>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Meta Description *</label>
-                  <textarea class="form-input" name="contact_meta_desc" rows="3" placeholder="Brief description of the Contact Us page..." style="resize:vertical;"></textarea>
-                  <div style="font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); margin-top:5px;">💡 Recommended: 150–160 characters</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- BANK DETAILS -->
-            <div class="form-section">
-              <div class="form-section-header"><div class="form-section-title">🏦 Bank Details</div></div>
-              <div class="form-section-body">
-                <div class="form-group">
-                  <label class="form-label">Meta Title *</label>
-                  <input class="form-input" type="text" name="bank_meta_title" placeholder="e.g. Bank Details — Bullion Hub"/>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Meta Description *</label>
-                  <textarea class="form-input" name="bank_meta_desc" rows="3" placeholder="Brief description of the Bank Details page..." style="resize:vertical;"></textarea>
-                  <div style="font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); margin-top:5px;">💡 Recommended: 150–160 characters</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- BOOKING DETAILS -->
-            <div class="form-section">
-              <div class="form-section-header"><div class="form-section-title">📋 Booking Details</div></div>
-              <div class="form-section-body">
-                <div class="form-group">
-                  <label class="form-label">Meta Title *</label>
-                  <input class="form-input" type="text" name="booking_meta_title" placeholder="e.g. Booking Desk — Bullion Hub"/>
-                </div>
-                <div class="form-group">
-                  <label class="form-label">Meta Description *</label>
-                  <textarea class="form-input" name="booking_meta_desc" rows="3" placeholder="Brief description of the Booking Details page..." style="resize:vertical;"></textarea>
-                  <div style="font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); margin-top:5px;">💡 Recommended: 150–160 characters</div>
-                </div>
-              </div>
-            </div>
-
-            <!-- Form Buttons -->
-            <div class="form-actions">
-              <button class="btn btn-outline" onclick="resetMetaSettings()">Cancel</button>
-              <!-- Team: PUT /api/meta/:clientId with all meta data -->
-              <button class="btn btn-success">✓ Save Meta Settings</button>
             </div>
 
           </div>
