@@ -1098,54 +1098,31 @@
 
 
 /* ============================================================
-   CONFIGURATION PAGE — Cards on top, full-width logs at bottom
+   CONFIGURATION PAGE — Layout with right logs panel
 ============================================================ */
 .config-layout-wrap {
   display: flex;
-  flex-direction: column;
   gap: 20px;
+  align-items: flex-start;
 }
 .config-layout-wrap .config-grid {
-  width: 100%;
+  flex: 1;
+  min-width: 0;
 }
 
-/* API Logs — Full width at bottom of configuration panel */
+/* API Logs — Right side panel inside Configuration */
 .config-logs-wrap {
-  width: 100%;
+  width: 300px;
+  flex-shrink: 0;
   background: var(--surface);
   border: 1px solid var(--border2);
   border-radius: 14px;
   overflow: hidden;
+  position: sticky;
+  top: calc(var(--header-h) + 20px);
+  max-height: calc(100vh - var(--header-h) - 80px);
   display: flex;
   flex-direction: column;
-}
-.config-logs-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding: 12px 20px;
-  background: var(--surface2);
-  border-bottom: 1px solid var(--border2);
-  flex-shrink: 0;
-}
-.logs-body {
-  height: 220px;
-  overflow-y: auto;
-  padding: 6px 0;
-  scrollbar-width: thin;
-  scrollbar-color: var(--border2) transparent;
-}
-
-/* Mobile responsive */
-@media(max-width: 900px) {
-  .config-logs-wrap { border-radius: 10px; }
-  .logs-body { height: 160px; }
-  .log-entry { padding: 5px 12px; font-size: 10px; }
-  .log-time { min-width: 50px; font-size: 10px; }
-}
-@media(max-width: 600px) {
-  .logs-body { height: 140px; }
-  .config-logs-header { padding: 10px 14px; flex-wrap: wrap; gap: 8px; }
 }
 .config-logs-header {
   display: flex;
