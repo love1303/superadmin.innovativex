@@ -118,22 +118,6 @@
           </div>
         </div>
 
-        <!-- reCAPTCHA Settings — Single click, no sub-menu -->
-        <div class="nav-item" id="nav-recaptcha">
-          <div class="nav-link" onclick="showPanel('recaptcha-settings'); setNavActive('nav-recaptcha')">
-            <span class="nav-icon">🤖</span>
-            <span class="nav-label">reCAPTCHA</span>
-          </div>
-        </div>
-
-        <!-- SMTP Configuration — Single click, no sub-menu -->
-        <div class="nav-item" id="nav-smtp">
-          <div class="nav-link" onclick="showPanel('smtp-config'); setNavActive('nav-smtp')">
-            <span class="nav-icon">📧</span>
-            <span class="nav-label">SMTP Config</span>
-          </div>
-        </div>
-
       </div>
     </aside>
 
@@ -597,40 +581,17 @@
             </div>
             <div class="form-section-body">
               <div class="coin-dealer-grid">
-                <div class="yn-item">
-                  <div style="display:flex; flex-direction:column; gap:6px; flex:1; margin-right:12px;">
-                    <span class="yn-label">Dealer 1</span>
-                    <input class="form-input" type="text" name="coin_dealer_1" placeholder="e.g. KUNDAN" style="margin:0;"/>
-                  </div>
-                  <label class="toggle"><input type="checkbox" name="coin_dealer_1_enabled" checked/><span class="toggle-slider"></span></label>
+                <div class="form-group">
+                  <label class="form-label">Dealer 1</label>
+                  <input class="form-input" type="text" name="coin_dealer_1" value="KUNDAN" placeholder="Dealer name"/>
                 </div>
-                <div class="yn-item">
-                  <div style="display:flex; flex-direction:column; gap:6px; flex:1; margin-right:12px;">
-                    <span class="yn-label">Dealer 2</span>
-                    <input class="form-input" type="text" name="coin_dealer_2" placeholder="e.g. MMTC PAMP" style="margin:0;"/>
-                  </div>
-                  <label class="toggle"><input type="checkbox" name="coin_dealer_2_enabled" checked/><span class="toggle-slider"></span></label>
+                <div class="form-group">
+                  <label class="form-label">Dealer 2</label>
+                  <input class="form-input" type="text" name="coin_dealer_2" value="MMTC PAMP" placeholder="Dealer name"/>
                 </div>
-                <div class="yn-item">
-                  <div style="display:flex; flex-direction:column; gap:6px; flex:1; margin-right:12px;">
-                    <span class="yn-label">Dealer 3</span>
-                    <input class="form-input" type="text" name="coin_dealer_3" placeholder="e.g. ELITE" style="margin:0;"/>
-                  </div>
-                  <label class="toggle"><input type="checkbox" name="coin_dealer_3_enabled" checked/><span class="toggle-slider"></span></label>
-                </div>
-                <div class="yn-item">
-                  <div style="display:flex; flex-direction:column; gap:6px; flex:1; margin-right:12px;">
-                    <span class="yn-label">Dealer 4</span>
-                    <input class="form-input" type="text" name="coin_dealer_4" placeholder="e.g. AUGMONT" style="margin:0;"/>
-                  </div>
-                  <label class="toggle"><input type="checkbox" name="coin_dealer_4_enabled"/><span class="toggle-slider"></span></label>
-                </div>
-                <div class="yn-item">
-                  <div style="display:flex; flex-direction:column; gap:6px; flex:1; margin-right:12px;">
-                    <span class="yn-label">Dealer 5</span>
-                    <input class="form-input" type="text" name="coin_dealer_5" placeholder="e.g. BANGALORE REFINERY" style="margin:0;"/>
-                  </div>
-                  <label class="toggle"><input type="checkbox" name="coin_dealer_5_enabled"/><span class="toggle-slider"></span></label>
+                <div class="form-group">
+                  <label class="form-label">Dealer 3</label>
+                  <input class="form-input" type="text" name="coin_dealer_3" value="ELITE" placeholder="Dealer name"/>
                 </div>
               </div>
             </div>
@@ -913,41 +874,9 @@
               </div>
               <div class="form-section-body">
                 <div class="coin-dealer-grid">
-                  <div class="yn-item">
-                    <div style="display:flex; flex-direction:column; gap:6px; flex:1; margin-right:12px;">
-                      <span class="yn-label">Dealer 1</span>
-                      <input class="form-input" type="text" id="e-dealer1" name="coin_dealer_1" placeholder="e.g. KUNDAN" style="margin:0;"/>
-                    </div>
-                    <label class="toggle"><input type="checkbox" id="e-dealer1-on" name="coin_dealer_1_enabled" checked/><span class="toggle-slider"></span></label>
-                  </div>
-                  <div class="yn-item">
-                    <div style="display:flex; flex-direction:column; gap:6px; flex:1; margin-right:12px;">
-                      <span class="yn-label">Dealer 2</span>
-                      <input class="form-input" type="text" id="e-dealer2" name="coin_dealer_2" placeholder="e.g. MMTC PAMP" style="margin:0;"/>
-                    </div>
-                    <label class="toggle"><input type="checkbox" id="e-dealer2-on" name="coin_dealer_2_enabled" checked/><span class="toggle-slider"></span></label>
-                  </div>
-                  <div class="yn-item">
-                    <div style="display:flex; flex-direction:column; gap:6px; flex:1; margin-right:12px;">
-                      <span class="yn-label">Dealer 3</span>
-                      <input class="form-input" type="text" id="e-dealer3" name="coin_dealer_3" placeholder="e.g. ELITE" style="margin:0;"/>
-                    </div>
-                    <label class="toggle"><input type="checkbox" id="e-dealer3-on" name="coin_dealer_3_enabled" checked/><span class="toggle-slider"></span></label>
-                  </div>
-                  <div class="yn-item">
-                    <div style="display:flex; flex-direction:column; gap:6px; flex:1; margin-right:12px;">
-                      <span class="yn-label">Dealer 4</span>
-                      <input class="form-input" type="text" id="e-dealer4" name="coin_dealer_4" placeholder="e.g. AUGMONT" style="margin:0;"/>
-                    </div>
-                    <label class="toggle"><input type="checkbox" id="e-dealer4-on" name="coin_dealer_4_enabled"/><span class="toggle-slider"></span></label>
-                  </div>
-                  <div class="yn-item">
-                    <div style="display:flex; flex-direction:column; gap:6px; flex:1; margin-right:12px;">
-                      <span class="yn-label">Dealer 5</span>
-                      <input class="form-input" type="text" id="e-dealer5" name="coin_dealer_5" placeholder="e.g. BANGALORE REFINERY" style="margin:0;"/>
-                    </div>
-                    <label class="toggle"><input type="checkbox" id="e-dealer5-on" name="coin_dealer_5_enabled"/><span class="toggle-slider"></span></label>
-                  </div>
+                  <div class="form-group"><label class="form-label">Dealer 1</label><input class="form-input" type="text" id="e-dealer1" name="coin_dealer_1"/></div>
+                  <div class="form-group"><label class="form-label">Dealer 2</label><input class="form-input" type="text" id="e-dealer2" name="coin_dealer_2"/></div>
+                  <div class="form-group"><label class="form-label">Dealer 3</label><input class="form-input" type="text" id="e-dealer3" name="coin_dealer_3"/></div>
                 </div>
               </div>
             </div>
@@ -1155,7 +1084,7 @@
                 <tr>
                   <td style="font-weight:600;">Gold Mart Traders</td>
                   <td class="td-mono">goldmart.in</td>
-                  <td class="td-mono"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="284b47465c494b5c684f47444c45495a5c064146">[email&#160;protected]</a></td>
+                  <td class="td-mono">contact@goldmart.in</td>
                   <td class="td-mono">+91 87654 32109</td>
                   <td class="td-mono" style="color:var(--muted);">15 Jan 2025</td>
                   <td>
@@ -1166,7 +1095,7 @@
                 <tr>
                   <td style="font-weight:600;">Silver Palace Jewellers</td>
                   <td class="td-mono">silverpalace.in</td>
-                  <td class="td-mono"><a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="f59d9099999ab5869c99839087859499949690db9c9b">[email&#160;protected]</a></td>
+                  <td class="td-mono">hello@silverpalace.in</td>
                   <td class="td-mono">+91 76543 21098</td>
                   <td class="td-mono" style="color:var(--muted);">02 Feb 2025</td>
                   <td>
@@ -1303,170 +1232,6 @@
             </div>
 
           </div>
-        </div>
-      </div>
-
-      <!-- =========================================================
-           RECAPTCHA SETTINGS PANEL
-           Team: GET /api/recaptcha/:clientId to load keys
-           Team: PUT /api/recaptcha/:clientId to save keys
-      ========================================================= -->
-      <div class="panel" id="panel-recaptcha-settings">
-        <div class="page-header">
-          <div>
-            <div class="page-title">reCAPTCHA Settings</div>
-            <div class="page-breadcrumb">🤖 <span>reCAPTCHA</span></div>
-          </div>
-        </div>
-
-        <!-- Select Client -->
-        <div class="card" style="margin-bottom:20px;">
-          <div class="card-header">
-            <div class="card-title"><span class="card-title-dot"></span> Select Client</div>
-          </div>
-          <div style="padding:16px 20px;">
-            <select class="form-select" id="recaptcha-client-select" onchange="loadRecaptchaSettings(this.value)" style="max-width:420px;">
-              <option value="">— Choose a client —</option>
-              <option value="1">Client A — Bullion Hub</option>
-              <option value="2">Client B — Gold Mart</option>
-              <option value="3">Client C — Silver Palace</option>
-            </select>
-          </div>
-        </div>
-
-        <!-- reCAPTCHA Form -->
-        <div id="recaptcha-form-wrap" style="display:none;">
-          <div class="form-section">
-            <div class="form-section-header">
-              <div class="form-section-title">Google reCAPTCHA v2 Keys</div>
-            </div>
-            <div class="form-section-body">
-              <div class="form-group">
-                <label class="form-label">Site ID (Public Key) *</label>
-                <input class="form-input" type="text" id="recaptcha-site-id" name="recaptcha_site_id" placeholder="6LxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxAA"/>
-                <div style="font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); margin-top:5px; letter-spacing:0.05em;">
-                  💡 Used in the frontend HTML — safe to expose publicly
-                </div>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Secret Key (Private Key) *</label>
-                <input class="form-input" type="password" id="recaptcha-secret-key" name="recaptcha_secret_key" placeholder="6LxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxAA"/>
-                <div style="font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--error); margin-top:5px; letter-spacing:0.05em;">
-                  ⚠️ Keep secret — only used on the server side, never expose publicly
-                </div>
-              </div>
-              <div style="background:rgba(15,143,255,0.05); border:1px solid var(--border2); border-radius:8px; padding:12px 14px; margin-top:4px;">
-                <div style="font-family:'JetBrains Mono',monospace; font-size:11px; color:var(--text2); letter-spacing:0.05em; margin-bottom:6px;">🔗 HOW TO GET YOUR KEYS</div>
-                <div style="font-size:13px; color:var(--muted); line-height:1.7;">
-                  1. Go to <strong style="color:var(--blue);">google.com/recaptcha/admin</strong><br/>
-                  2. Register your site domain<br/>
-                  3. Choose reCAPTCHA v2 — "I'm not a robot"<br/>
-                  4. Copy Site Key → paste in Site ID above<br/>
-                  5. Copy Secret Key → paste in Secret Key above
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="form-actions">
-            <button class="btn btn-outline" onclick="resetRecaptchaSettings()">Cancel</button>
-            <!-- Team: PUT /api/recaptcha/:clientId -->
-            <button class="btn btn-success">✓ Save reCAPTCHA Keys</button>
-          </div>
-        </div>
-      </div>
-
-      <!-- =========================================================
-           SMTP CONFIGURATION PANEL
-           Team: GET /api/smtp to load saved config
-           Team: POST /api/smtp to save config
-           Team: POST /api/smtp/test to send test email
-      ========================================================= -->
-      <div class="panel" id="panel-smtp-config">
-        <div class="page-header">
-          <div>
-            <div class="page-title">SMTP Configuration</div>
-            <div class="page-breadcrumb">📧 <span>SMTP Config</span></div>
-          </div>
-        </div>
-
-        <div class="form-section">
-          <div class="form-section-header">
-            <div class="form-section-title">Mail Server Settings</div>
-          </div>
-          <div class="form-section-body">
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">SMTP Host *</label>
-                <input class="form-input" type="text" name="smtp_host" placeholder="e.g. smtp.gmail.com"/>
-              </div>
-              <div class="form-group">
-                <label class="form-label">SMTP Port *</label>
-                <input class="form-input" type="number" name="smtp_port" placeholder="e.g. 587"/>
-              </div>
-            </div>
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">Encryption *</label>
-                <select class="form-select" name="smtp_encryption">
-                  <option value="">— Select encryption —</option>
-                  <option value="tls">TLS (Recommended — Port 587)</option>
-                  <option value="ssl">SSL (Port 465)</option>
-                  <option value="none">None (Port 25)</option>
-                </select>
-              </div>
-              <div class="form-group">
-                <label class="form-label">Username / Email *</label>
-                <input class="form-input" type="email" name="smtp_username" placeholder="e.g. noreply@innovativex.in"/>
-              </div>
-            </div>
-            <div class="form-group">
-              <label class="form-label">Password *</label>
-              <input class="form-input" type="password" name="smtp_password" placeholder="App password or SMTP password"/>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-section">
-          <div class="form-section-header">
-            <div class="form-section-title">Sender Details</div>
-          </div>
-          <div class="form-section-body">
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">From Name *</label>
-                <input class="form-input" type="text" name="smtp_from_name" placeholder="e.g. Innovative X"/>
-              </div>
-              <div class="form-group">
-                <label class="form-label">From Email *</label>
-                <input class="form-input" type="email" name="smtp_from_email" placeholder="e.g. noreply@innovativex.in"/>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="form-section">
-          <div class="form-section-header">
-            <div class="form-section-title">Test Configuration</div>
-          </div>
-          <div class="form-section-body">
-            <div class="form-row">
-              <div class="form-group">
-                <label class="form-label">Send Test Email To</label>
-                <input class="form-input" type="email" id="smtp-test-email" name="smtp_test_email" placeholder="Enter your email to receive test mail"/>
-              </div>
-              <div class="form-group" style="display:flex; align-items:flex-end;">
-                <!-- Team: POST /api/smtp/test with test email -->
-                <button class="btn btn-outline" style="width:100%;" onclick="sendSmtpTest()">📨 Send Test Email</button>
-              </div>
-            </div>
-            <div id="smtp-test-result" style="display:none; padding:10px 14px; border-radius:8px; font-family:'JetBrains Mono',monospace; font-size:12px; margin-top:4px;"></div>
-          </div>
-        </div>
-
-        <div class="form-actions">
-          <button class="btn btn-outline" onclick="showPanel('welcome')">Cancel</button>
-          <!-- Team: POST /api/smtp with all config fields -->
-          <button class="btn btn-success">✓ Save SMTP Config</button>
         </div>
       </div>
 
@@ -1670,43 +1435,11 @@
   </div>
 
   <!-- ============================================================
-       JAVASCRIPT — External file
+       JAVASCRIPT
+       All UI logic is here. Team: replace dummy data/alerts
+       with actual API calls using fetch() or axios.
   ============================================================ -->
   <script src="dashboard.js"></script>
-
-  <!-- ============================================================
-       API LOGS — Floating footer terminal
-       Team: push log entries via addLog() in dashboard.js
-  ============================================================ -->
-  <div class="logs-footer" id="logsFooter">
-    <div class="logs-header" onclick="toggleLogs()">
-      <div class="logs-header-left">
-        <span class="logs-dot logs-dot-green"></span>
-        <span class="logs-title">⚡ API Logs</span>
-        <span class="logs-count badge badge-blue" id="logsCount">0 entries</span>
-      </div>
-      <div class="logs-header-right">
-        <div class="toggle-wrap" onclick="event.stopPropagation()">
-          <label class="toggle" style="width:36px; height:20px;">
-            <input type="checkbox" id="logsToggle" checked onchange="toggleLogsEnabled(this)"/>
-            <span class="toggle-slider"></span>
-          </label>
-          <span style="font-family:'JetBrains Mono',monospace; font-size:10px; color:var(--muted); letter-spacing:0.06em;" id="logsToggleLabel">ON</span>
-        </div>
-        <button class="logs-clear-btn" onclick="event.stopPropagation(); clearLogs()" title="Clear logs">🗑</button>
-        <span class="logs-toggle-icon" id="logsToggleIcon">▲</span>
-      </div>
-    </div>
-    <div class="logs-body" id="logsBody">
-      <div id="logsContent">
-        <div class="log-entry log-info">
-          <span class="log-time">--:--:--</span>
-          <span class="log-badge log-badge-info">INFO</span>
-          <span class="log-msg">API Logs initialized. Waiting for events...</span>
-        </div>
-      </div>
-    </div>
-  </div>
 
 </body>
 </html>
