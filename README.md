@@ -1,6 +1,6 @@
 # Innovative X — SuperAdmin Panel
 
-A web-based SuperAdmin dashboard for managing clients, MCX API feeds, and frontend content for the Innovative X SaaS platform (Live Bullion View).
+We are creating a Super Admin Web Panel to manage our SaaS users. Since we provide SaaS software, we need a system where we can manage all user settings and configurations from a central panel.
 
 ---
 
